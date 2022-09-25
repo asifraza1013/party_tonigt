@@ -1,13 +1,11 @@
 @extends('layouts.app', ['title' => __('User Management')])
 
 @section('content')
-    @include('users.partials.header', ['title' => __('Edit User')])
-
     <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-xl-12 order-xl-1">
                 <div class="card bg-secondary shadow">
-                    <div class="card-header bg-white border-0">
+                    <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col-8">
                                 <h3 class="mb-0">{{ __('User Management') }}</h3>
@@ -17,6 +15,12 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-12 order-xl-1">
+                <div class="card bg-secondary shadow">
                     <div class="card-body">
                         <form method="post" action="{{ route('users.update', $user) }}" autocomplete="off">
                             @csrf
@@ -68,21 +72,6 @@
                                     <label class="form-control-label" for="input-password-confirmation">{{ __('Confirm Password') }}</label>
                                     <input type="password" name="confirm-password" id="input-password-confirmation" class="form-control form-control-alternative" placeholder="{{ __('Confirm Password') }}" value="">
                                 </div>
-                                <div class="form-group{{ $errors->has('roles') ? ' has-danger' : '' }}">
-                                    <label class="form-control-label" for="">{{ __('User Role') }}</label>
-                                    <select class="form-control form-control-alternative{{ $errors->has('roles') ? ' is-invalid' : '' }}" name="roles">
-                                        <option disabled selected value> -- {{ __('Select an option') }} -- </option>
-                                        @foreach ($roles as $key=>$item)
-                                        <option value="{{ $key }}" {{ (!empty($userRole[$item]) && $userRole[$item] == $item) ? 'selected' : ''  }}>{{ $item }}</option>
-                                        @endforeach
-                                    </select>
-
-                                    @if ($errors->has('roles'))
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $errors->first('roles') }}</strong>
-                                    </span>
-                                    @endif
-                                </div>
                                 <div class="form-group{{ $errors->has('status') ? ' has-danger' : '' }}">
                                     <label class="form-control-label" for="">{{ __('Status') }}</label>
                                     <select class="form-control form-control-alternative{{ $errors->has('status') ? ' is-invalid' : '' }}" name="status">
@@ -107,7 +96,5 @@
                 </div>
             </div>
         </div>
-
-        @include('layouts.footers.auth')
     </div>
 @endsection

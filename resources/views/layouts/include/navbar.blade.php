@@ -201,8 +201,8 @@
         <div class="navbar-header">
             <ul class="nav navbar-nav flex-row">
                 <li class="nav-item mr-auto"><a class="navbar-brand"
-                        href="../../../html/ltr/vertical-menu-template-dark/index.html">
-                        <div class="brand-logo"><img class="logo" src="../../../app-assets/images/logo/logo.png" />
+                        href="{{ route('home') }}">
+                        <div class="brand-logo"><img class="logo" src="{{ asset('app-assets/images/logo/logo.png')}}" />
                         </div>
                         <h2 class="brand-text mb-0">Party Tonight</h2>
                     </a></li>
@@ -217,11 +217,13 @@
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation"
                 data-icon-style="lines">
                 </li>
-                <li class="{{ (Route::has('home')) ? 'active':'' }} nav-item"><a href="{{ route('home') }}"><i class="menu-livicon" data-icon="desktop"></i><span
-                            class="menu-title" data-i18n="Email">Dashboard</span></a>
+                <li class="{{ (Route::current()->getName() == 'home') ? 'active':'' }} nav-item"><a href="{{ route('home') }}"><i class="menu-livicon" data-icon="desktop"></i><span class="menu-title" data-i18n="Email">Dashboard</span></a>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="menu-livicon" data-icon="users"></i><span
+                <li class="{{ (Route::current()->getName() == 'users.index') ? 'active':'' }} nav-item"><a href="{{ route('users.index') }}"><i class="menu-livicon" data-icon="users"></i><span
                             class="menu-title" data-i18n="users">Users</span></a>
+                </li>
+                <li class="{{ (Route::current()->getName() == 'user.apps.list') ? 'active':'' }} nav-item"><a href="{{ route('user.apps.list') }}"><i class="bx bx-mobile" data-icon="users"></i><span
+                            class="menu-title" data-i18n="users">Mobile Users</span></a>
                 </li>
                 <li class=" nav-item"><a href="#"><i class="menu-livicon" data-icon="calendar"></i><span
                             class="menu-title" data-i18n="Calendar">Events</span></a>
@@ -240,7 +242,7 @@
                 <li class=" navigation-header"><span>Settings</span>
                 <li class=" nav-item"><a class="" href="#"
                         onclick="event.preventDefault();
-                              document.getElementById('logout-form').submit();"><i class="bx bx-right-arrow-alt"></i><span class="menu-item" data-i18n="Pills Component">Logout</span></a>
+                              document.getElementById('logout-form').submit();"><i class="bx bx-power-off"></i><span class="menu-item" data-i18n="desktop">Logout</span></a>
                 </li>
             </ul>
         </div>

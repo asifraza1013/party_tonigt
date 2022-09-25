@@ -40,6 +40,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}">
     <!-- END: Custom CSS-->
 
+    @yield('extra-css')
 </head>
 <!-- END: Head-->
 
@@ -97,6 +98,8 @@
     <!-- BEGIN: Page JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     <!-- END: Page JS-->
+
+    @yield('extra-js')
     <script>
         $(document).ready(function() {
             console.log('errors ');

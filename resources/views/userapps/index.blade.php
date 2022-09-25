@@ -2,22 +2,6 @@
 
 @section('content')
 <div class="users-list-table">
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-8">
-                            <h3 class="mb-0">{{ __('Users') }}</h3>
-                        </div>
-                        <div class="col-4 text-right">
-                            <a href="{{ route('users.create') }}" class="btn btn-sm btn-primary">{{ __('Add user') }}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="card">
         <div class="card-content">
             <div class="card-body">
@@ -28,6 +12,7 @@
                             <tr>
                                 <th scope="col">{{ __('Name') }}</th>
                                 <th scope="col">{{ __('Email') }}</th>
+                                <th scope="col">{{ __('Gender') }}</th>
                                 <th scope="col">{{ __('Status') }}</th>
                                 <th scope="col">{{ __('Creation Date') }}</th>
                                 <th scope="col">Action</th>
@@ -36,11 +21,14 @@
                         <tbody>
                             @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                 <td>{{ $user->email }}</td>
+                                <td>{{ $user->gender }}</td>
                                 <td>
                                     @if ($user->status == 1)
                                     <span class="badge badge-success badge-pill">Active</span>
+                                    @elseif ($user->status == 3)
+                                    <span class="badge badge-info badge-pill">Unverified</span>
                                     @else
                                     <span class="badge badge-danger badge-pill">Terminated</span>
                                     @endif
@@ -48,7 +36,7 @@
                                 <td>{{ $user->created_at->format('d/m/Y') }}</td>
                                 <td>
                                     <div class="flex">
-                                        <a href="{{ route('users.edit', $user) }}"><i class="bx bxs-edit-alt"></i>Edit</a>
+                                        <a href="{{ route('user.apps.deatil', $user->id) }}"><i class="bx bxs-user-detail"></i>Detail</a>
                                         @if ($user->id != auth()->id())
                                             <form action="{{ route('users.destroy', $user) }}" method="post">
                                                 @csrf

@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/redirect', [HomeController::class, 'redirect'])->name('redirect');
 
-    Route::resource('users', [UserController::class]);
+    Route::get('/user_apps', [HomeController::class, 'userAppList'])->name('user.apps.list');
+    Route::get('/user_apps_detail/{id?}', [HomeController::class, 'showUserAppDetail'])->name('user.apps.deatil');
+
+    Route::resource('users', UserController::class);
     // Route::resource('users','UserController');
 });
