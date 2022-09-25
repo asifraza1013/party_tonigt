@@ -217,18 +217,19 @@
             <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation"
                 data-icon-style="lines">
                 </li>
-                <li class="{{ (Route::current()->getName() == 'home') ? 'active':'' }} nav-item"><a href="{{ route('home') }}"><i class="menu-livicon" data-icon="desktop"></i><span class="menu-title" data-i18n="Email">Dashboard</span></a>
+                <li class="{{ (Route::current()->getName() == 'home') ? 'active':'' }} nav-item"><a href="{{ route('home') }}"><i class="bx bx-dashboard" data-icon="desktop"></i><span class="menu-title" data-i18n="Email">Dashboard</span></a>
                 </li>
-                <li class="{{ (Route::current()->getName() == 'users.index') ? 'active':'' }} nav-item"><a href="{{ route('users.index') }}"><i class="menu-livicon" data-icon="users"></i><span
+                <li class="{{ (Route::current()->getName() == 'users.index') ? 'active':'' }} nav-item"><a href="{{ route('users.index') }}"><i class="bx
+                    bxs-group" data-icon="users"></i><span
                             class="menu-title" data-i18n="users">Users</span></a>
                 </li>
                 <li class="{{ (Route::current()->getName() == 'user.apps.list') ? 'active':'' }} nav-item"><a href="{{ route('user.apps.list') }}"><i class="bx bx-mobile" data-icon="users"></i><span
                             class="menu-title" data-i18n="users">Mobile Users</span></a>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="menu-livicon" data-icon="calendar"></i><span
+                <li class=" nav-item"><a href="#"><i class="bx bxs-calendar" data-icon="calendar"></i><span
                             class="menu-title" data-i18n="Calendar">Events</span></a>
                 </li>
-                <li class=" nav-item"><a href="app-kanban.html"><i class="menu-livicon" data-icon="user"></i><span
+                <li class=" nav-item"><a href="app-kanban.html"><i class="bx bxs-user-badge" data-icon="user"></i><span
                             class="menu-title" data-i18n="user">Profile</span></a>
                 </li>
                 {{-- <li class=" nav-item"><a href="#"><i class="menu-livicon" data-icon="check"></i><span

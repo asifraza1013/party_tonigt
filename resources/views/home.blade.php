@@ -176,7 +176,7 @@
                                             <div class="widget-todo-item-action d-flex align-items-center">
                                                 <div class="badge badge-pill badge-light-danger mr-1">backend</div>
                                                 <div class="avatar m-0 mr-50">
-                                                    <img src="../../../app-assets/images/profile/user-uploads/social-2.jpg"
+                                                    <img src="{{ asset('app-assets/images/profile/user-uploads/social-2.jpg') }}"
                                                         alt="img placeholder" height="32" width="32">
                                                 </div>
                                                 <div class="dropdown">
@@ -244,7 +244,7 @@
                                             <div class="widget-todo-item-action d-flex align-items-center">
                                                 <div class="badge badge-pill badge-light-info mr-1">Design</div>
                                                 <div class="avatar m-0 mr-50">
-                                                    <img src="../../../app-assets/images/profile/user-uploads/user-05.jpg"
+                                                    <img src="{{ asset('app-assets/images/profile/user-uploads/user-05.jpg') }}"
                                                         alt="img placeholder" height="32" width="32">
                                                 </div>
                                                 <div class="dropdown">
@@ -311,7 +311,7 @@
                                             <div class="widget-todo-item-action d-flex align-items-center">
                                                 <div class="badge badge-pill badge-light-primary mr-1">UI/UX</div>
                                                 <div class="avatar m-0 mr-50">
-                                                    <img src="../../../app-assets/images/profile/user-uploads/user-05.jpg"
+                                                    <img src="{{ asset('app-assets/images/profile/user-uploads/user-05.jpg') }}"
                                                         alt="img placeholder" height="32" width="32">
                                                 </div>
                                                 <div class="dropdown">
