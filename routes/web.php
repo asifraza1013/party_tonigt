@@ -28,6 +28,8 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('/user_apps', [HomeController::class, 'userAppList'])->name('user.apps.list');
     Route::get('/user_apps_detail/{id?}', [HomeController::class, 'showUserAppDetail'])->name('user.apps.deatil');
+    Route::get('/events/{id?}', [HomeController::class, 'eventsList'])->name('user.apps.events.list');
+    Route::get('/profile/{id?}', [HomeController::class, 'profile'])->name('admin.profile');
 
     Route::resource('users', UserController::class);
     // Route::resource('users','UserController');

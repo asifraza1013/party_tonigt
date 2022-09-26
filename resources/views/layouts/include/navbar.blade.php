@@ -179,7 +179,7 @@
                                         alt="avatar" height="40" width="40"></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right pb-0"><a class="dropdown-item"
-                                    href="#"><i class="bx bx-user mr-50"></i> Profile</a>
+                                    href="{{ route('admin.profile') }}"><i class="bx bx-user mr-50"></i> Profile</a>
                                 <div class="dropdown-divider mb-0"></div><a class="dropdown-item" href="#"
                                     onclick="event.preventDefault();
                                               document.getElementById('logout-form').submit();"><i
@@ -226,10 +226,10 @@
                 <li class="{{ (Route::current()->getName() == 'user.apps.list') ? 'active':'' }} nav-item"><a href="{{ route('user.apps.list') }}"><i class="bx bx-mobile" data-icon="users"></i><span
                             class="menu-title" data-i18n="users">Mobile Users</span></a>
                 </li>
-                <li class=" nav-item"><a href="#"><i class="bx bxs-calendar" data-icon="calendar"></i><span
+                <li class="{{ (Route::current()->getName() == 'user.apps.events.list') ? 'active':'' }} nav-item"><a href="{{ route('user.apps.events.list') }}"><i class="bx bxs-calendar" data-icon="calendar"></i><span
                             class="menu-title" data-i18n="Calendar">Events</span></a>
                 </li>
-                <li class=" nav-item"><a href="app-kanban.html"><i class="bx bxs-user-badge" data-icon="user"></i><span
+                <li class="{{ (Route::current()->getName() == 'admin.profile') ? 'active':'' }} nav-item"><a href="{{ route('admin.profile') }}"><i class="bx bxs-user-badge" data-icon="user"></i><span
                             class="menu-title" data-i18n="user">Profile</span></a>
                 </li>
                 {{-- <li class=" nav-item"><a href="#"><i class="menu-livicon" data-icon="check"></i><span

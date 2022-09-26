@@ -45,4 +45,16 @@ class HomeController extends Controller
         $user = UserApp::where('id',$id)->first();
         return view('userapps.show',compact('user'));
     }
+
+    public function eventsList(Request $request)
+    {
+        $users = UserApp::orderBy('id','ASC')->paginate(5);
+        return view('userapps.events',compact('users'))
+        ->with('i', ($request->input('page', 1) - 1) * 5);
+    }
+
+    public function profile(Request $request)
+    {
+        return view('users.show');
+    }
 }
