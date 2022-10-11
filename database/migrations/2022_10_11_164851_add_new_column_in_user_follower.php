@@ -15,6 +15,7 @@ class AddNewColumnInUserFollower extends Migration
     {
         Schema::table('user_follower', function (Blueprint $table) {
             $table->boolean('only_block')->default(false)->after('is_blocked');
+            $table->boolean('only_block')->default(false)->after('is_blocked');
         });
     }
 

@@ -15,7 +15,14 @@ class CreatePostActivitiesTable extends Migration
     {
         Schema::create('post_activities', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_apps_id');
+            $table->unsignedBigInteger('post_id');
+            $table->enum('type', config('constants.enums.post_activities'));
+            $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('user_apps_id')->references('id')->on('user_apps')->onDelete('cascade');
+            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
         });
     }
 

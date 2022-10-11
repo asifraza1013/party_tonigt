@@ -77,6 +77,8 @@ class PostManagementController extends Controller
         if(!empty($request->friends)) $post->friends = $request->friends;
         if(!empty($request->price)) $post->price = $request->price;
         if(!empty($request->total_tickets)) $post->total_tickets = $request->total_tickets;
+
+        if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
         $post->save();
 
         return response()->json([
