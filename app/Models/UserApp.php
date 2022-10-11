@@ -5,21 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Overtrue\LaravelFollow\Followable;
+use Overtrue\LaravelFollow\Follower;
 use Laravel\Sanctum\HasApiTokens;
 
 class UserApp extends Model
 {
-    use HasFactory, HasApiTokens, Notifiable;
+    use Notifiable, HasApiTokens, Followable;
 
     protected $guarded=['id'];
     protected $hidden = [
         'password',
-        'user_name',
-        'country',
-        'dob',
     ];
+
     public $timestamps = true;
     protected $fillable = [
+        'google_id',
+        'apple_id',
         'image',
         'otp',
         'admin_approved',
@@ -33,4 +35,28 @@ class UserApp extends Model
         'status',
         'user_name',
     ];
+
+    public function activities()
+    {
+        return $this->hasManyThrough('App\Model\PostActivity', 'App\Model\Post', 'user_apps_id', 'post_id');
+    }
+
+    public function posts()
+    {
+        return $this->hasMany('App\Model\Post', 'user_apps_id');
+    }
+
+    // public function followers()
+    // {
+    //     return $this->hasMany('Overtrue\LaravelFollow\FollowRelation');
+    // }
+
+    // public function following()
+    // {
+    //     return $this->hasMany('Overtrue\LaravelFollow\FollowRelation');
+    // }
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
 }
