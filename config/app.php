@@ -162,7 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Overtrue\LaravelFollow\FollowServiceProvider::class,
-        LaravelFCM\FCMServiceProvider::class,
+        // LaravelFCM\FCMServiceProvider::class,
 
         /*
          * Package Service Providers...
