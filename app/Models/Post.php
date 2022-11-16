@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Tags\HasTags;
 
 class Post extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use HasTags;
     protected $casts = [
         'media_url' => 'array',
         'tags' => 'array',

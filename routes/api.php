@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/search_users', [LoginController::class, 'searchUserTagFriends'])->name('client.search.users');
+Route::get('/search_tags', [LoginController::class, 'saerchTags'])->name('client.search.tags');
 Route::group(['namespace' => 'Api'], function () {
     Route::post('/signup', [LoginController::class, 'userSignUp']);
     Route::post('/send_otp', [LoginController::class, 'sendOtp']);

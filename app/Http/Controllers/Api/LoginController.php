@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Tags\Tag as TagsTag;
 
 class LoginController extends Controller
 {
@@ -442,9 +443,8 @@ class LoginController extends Controller
         $users = [];
         if($request->has('q')){
             $search = $request->q;
-            $users = Tag::select("id", "user_name")
-            		->where('user_name', 'LIKE', "%$search%")
-                    ->where('status', 1)
+            $users = TagsTag::select("id", "name")
+            		->where('name', 'LIKE', "%$search%")
             		->get();
         }
         return response()->json($users);

@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Overtrue\LaravelFollow\Followable;
-use Overtrue\LaravelFollow\Follower;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -64,5 +63,11 @@ class UserApp extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->first_name.' '.$this->last_name;
+    }
+
+    public function needsToApproveFollowRequests()
+    {
+        // Your custom logic here
+        return (bool) $this->private;
     }
 }

@@ -130,16 +130,17 @@
 
                     <!-- Post Content
                             ================================================= -->
+                    @foreach ($posts as $key=>$post)
                     <div class="post-content">
-                        <img src="https://via.placeholder.com/1920x1280" alt="post-image"
+                        <img src="{{$post->media_url[0]}}" alt="post-image"
                             class="img-responsive post-image" />
                         <div class="post-container">
-                            <img src="https://via.placeholder.com/300" alt="user" class="profile-photo-md pull-left" />
+                            <img src="{{ getUserProfileImage($post->user) }}" alt="user" class="profile-photo-md pull-left" />
                             <div class="post-detail">
                                 <div class="user-info">
-                                    <h5><a href="timeline.html" class="profile-link">Alexis Clark</a> <span
+                                    <h5><a href="timeline.html" class="profile-link">{{ getUserFullName($post->user) }}</a> <span
                                             class="following">following</span></h5>
-                                    <p class="text-muted">Published a photo about 3 mins ago</p>
+                                    <p class="text-muted">Published about {{ calculatePostTitme($post) }}</p>
                                 </div>
                                 <div class="reaction">
                                     <a class="btn text-green"><i class="icon ion-thumbsup"></i> 13</a>
@@ -176,6 +177,7 @@
                             </div>
                         </div>
                     </div>
+                    @endforeach
 
                     <!-- Post Content
                             ================================================= -->
@@ -496,14 +498,13 @@
                         </div>
                         <div class="form-group">
                             <label for="my-password">Tag Friends<span class="text-danger">*</span></label> <br>
-                            <select class="livesearch form-control p-3" name="friends[]" multiple="multiple"></select>
+                            <select class="userSearch form-control p-3" name="friends[]" multiple="multiple"></select>
                             {{-- <input class="form-control input-group-lg" type="text" name="friends"
                                 title="add @ Tag Friends" placeholder="add @ Tag Friends" id="friends-list" /> --}}
                         </div>
                         <div class="form-group">
                             <label for="my-password">Add #Tags<span class="text-danger">*</span></label>
-                            <input class="form-control input-group-lg" type="text" name="tags" title="Add #Tags"
-                                placeholder="Add #Tags" />
+                            <select class="tagSearch form-control p-3" name="tags[]" multiple="multiple"></select>
                         </div>
                         <div class="form-group">
                             <label for="my-password">Add Media<span class="text-danger">*</span></label>
@@ -552,9 +553,6 @@
     <script>
         $(document).ready(function() {
             // $.fn.modal.Constructor.prototype.enforceFocus = function() {};
-            // self called functions
-            // populateUsersList([]);
-            $('.livesearch').select2();
 
             $('#detail-checkbox').on('change', function() {
                 let isChecked = $(this).is(':checked');
@@ -563,8 +561,10 @@
                 else $('.ticket-detail').addClass('d-none');
             })
 
-            $('.livesearch').select2({
+            // friend list search.
+            $('.userSearch').select2({
                 placeholder: 'Select Friends',
+                // tags: true,
                 ajax: {
                     url: "{{route('client.search.users')}}",
                     dataType: 'json',
@@ -583,19 +583,27 @@
                 }
             });
 
-            //get friends lsit
-            // $('#friends-list').on('keypress', function() {
-            //     console.log('fridsn list clicked');
-            //     setTimeout(() => {
-            //         let userKey = $(this).val();
-            //         userKey = userKey.replace('@', '')
-            //         console.log('userKey ', userKey);
-            //     }, 100);
-            // })
-
-            function populateUsersList(users) {
-                console.log('poppulateUserList ', users);
-            }
+            // tag list search.
+            $('.tagSearch').select2({
+                placeholder: 'Select Tags',
+                tags: true,
+                ajax: {
+                    url: "{{route('client.search.tags')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.user_name,
+                                    id: item.user_name
+                                }
+                            })
+                        };
+                    },
+                    cache: true
+                }
+            });
         });
     </script>
 @endsection

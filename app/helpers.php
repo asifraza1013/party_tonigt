@@ -3,6 +3,8 @@
 use App\DeviceToken;
 use App\OrderHasStatus;
 use App\Status;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('error_msg_serialize')) {
@@ -239,9 +241,39 @@ if (!function_exists('getUserProfileImage')) {
     }
 }
 
+if (!function_exists('getUserFullName')) {
+    function getUserFullName($user)
+    {
+        return $user->first_name.' '.$user->last_name;
+    }
+}
+
 if (!function_exists('currency')) {
     function currency($amount = null)
     {
         return ($amount) ? '$'.$amount : '$';
+    }
+}
+
+if (!function_exists('calculatePostTitme')) {
+    function calculatePostTitme($post)
+    {
+        $startTime = Carbon::parse(Carbon::now()->toDateTimeString());
+        $endTime = Carbon::parse($post->created_at);
+        return $endTime->diffForHumans($startTime);
+    }
+}
+
+if (!function_exists('uploadImage')) {
+    function uploadImage($query)
+    {
+        $image_name = Str::random(20);
+        $ext = strtolower($query->getClientOriginalExtension()); // You can use also getClientOriginalName()
+        $image_full_name = $image_name.'.'.$ext;
+        $upload_path = 'client/';    //Creating Sub directory in Public folder to put image
+        $image_url = $upload_path.$image_full_name;
+        $success = $query->move($upload_path,$image_full_name);
+
+        return asset('client/'.$image_url);
     }
 }

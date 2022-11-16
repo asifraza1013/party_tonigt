@@ -45,22 +45,6 @@ class PostManagementController extends Controller
 
         $profile = $request->user();
 
-        // if request got tags
-        if($request->tages){
-            foreach($request->tages as $tag){
-                Tag::updateOrCreate(
-                    [
-                        'name' => str_replace( array( '\'', '"',
-                        ',' , ';', '<', '>', '#'), ' ', $tag),
-                        'slug' => $tag
-                    ],
-                    [
-                        'type' => 1
-                    ]
-                    );
-            }
-        }
-
         $post = new Post();
         $post->title = $request->title;
         $post->description = $request->description;
@@ -81,6 +65,7 @@ class PostManagementController extends Controller
         if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
         $post->save();
 
+        if(!empty($request->tags)) $post->attachTags($request->tags);
         return response()->json([
             'status' => true,
             'code' => 1001,
@@ -117,7 +102,12 @@ class PostManagementController extends Controller
             },
             'post_activities as commented' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_COMMENT'))->where('user_apps_id', $profile->id);
-            }
+            },
+            // 'followers as is_following' => function ($query) use ($profile) {
+            //     $query->where('followables.user_apps_id', $profile->id);
+            // },
+            // 'following as following_count',
+            // 'followers as followers_count'
         ];
 
         $blockedUsers = $profile->followings()->where('is_blocked', true)->pluck('user_follower.following_id')->all();
