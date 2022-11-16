@@ -29,6 +29,7 @@ class CreateUserAppsTable extends Migration
             $table->boolean('admin_approved')->default(true);
             $table->boolean('enable_notifications')->default(true);
             $table->string('status');
+            $table->rememberToken();
             $table->integer('type')->default(1)->comment('1: User, 2: Event Manager');
             $table->timestamps();
         });

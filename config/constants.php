@@ -103,6 +103,20 @@ return [
             'id' => 6,
             'name' => 'Animales',
         ],
+    ],
+    'month_list' => [
+        '01' => 'Jan',
+        '02' => 'Feb',
+        '03' => 'March',
+        '04' => 'April',
+        '05' => 'May',
+        '06' => 'Jun',
+        '07' => 'July',
+        '08' => 'Agust',
+        '09' => 'September',
+        '10' => 'October',
+        '11' => 'November',
+        '12' => 'December',
     ]
 ];
 

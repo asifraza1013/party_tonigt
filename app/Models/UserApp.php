@@ -8,11 +8,13 @@ use Illuminate\Notifications\Notifiable;
 use Overtrue\LaravelFollow\Followable;
 use Overtrue\LaravelFollow\Follower;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class UserApp extends Model
+class UserApp extends Authenticatable
 {
     use Notifiable, HasApiTokens, Followable;
 
+    protected $guard = 'client';
     protected $guarded=['id'];
     protected $hidden = [
         'password',
@@ -58,5 +60,9 @@ class UserApp extends Model
     public function getAuthPassword()
     {
         return $this->password;
+    }
+    public function getFullNameAttribute()
+    {
+        return $this->first_name.' '.$this->last_name;
     }
 }

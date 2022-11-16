@@ -53,7 +53,7 @@
         <div class="content-wrapper">
             <div class="content-header row">
             </div>
-            @include('sweetalert::alert')
+            {{-- @include('sweetalert::alert') --}}
             <div class="content-body">
                 @yield('content')
             </div>

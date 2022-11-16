@@ -16,7 +16,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <form action="{{ route('login') }}" method="POST">
+                                <form action="{{ route('submit.admin.login') }}" method="POST">
                                     @csrf
                                     <div class="form-group mb-50">
                                         <label class="text-bold-600" for="exampleInputEmail1">Email address</label>

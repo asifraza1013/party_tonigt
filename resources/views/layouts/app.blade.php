@@ -57,7 +57,7 @@
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>
-            @include('sweetalert::alert')
+            {{-- @include('sweetalert::alert') --}}
             <div class="content-body">
                 @yield('content')
             </div>

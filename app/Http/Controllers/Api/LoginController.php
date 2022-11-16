@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\DeviceToken;
+use App\Models\Tag;
 use App\Models\UserApp;
 use App\Notifications\SendOtpNotification;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
-    /**
+    public function __construct()
+    {
+        $this->middleware('guest')->except('logout');
+        $this->middleware('guest:client')->except('logout');
+    }
+
+     /**
      * signup for customer
      */
     public function userSignUp(Request $request)
@@ -79,6 +87,7 @@ class LoginController extends Controller
             'message' => config('response.1003.message'),
         ]);
     }
+
 
     /**
      * customer login
@@ -413,5 +422,31 @@ class LoginController extends Controller
             'code' => 2013,
             'message' => 'Message Updated successfully.'
         ]);
+    }
+
+    public function searchUserTagFriends(Request $request)
+    {
+        $users = [];
+        if($request->has('q')){
+            $search = $request->q;
+            $users = UserApp::select("id", "user_name")
+            		->where('user_name', 'LIKE', "%$search%")
+                    ->where('status', 1)
+            		->get();
+        }
+        return response()->json($users);
+    }
+
+    public function saerchTags(Request $request)
+    {
+        $users = [];
+        if($request->has('q')){
+            $search = $request->q;
+            $users = Tag::select("id", "user_name")
+            		->where('user_name', 'LIKE', "%$search%")
+                    ->where('status', 1)
+            		->get();
+        }
+        return response()->json($users);
     }
 }

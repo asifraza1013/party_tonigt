@@ -224,3 +224,24 @@ if (!function_exists('sendChatNotification')) {
         return $response;
     }
 }
+if (!function_exists('isJsonRequest')) {
+    function isJsonRequest($request)
+    {
+        if($request->isJson()) return true;
+        else return false;
+    }
+}
+
+if (!function_exists('getUserProfileImage')) {
+    function getUserProfileImage($user)
+    {
+        return ($user->image) ? $user->image : 'https://via.placeholder.com/300';
+    }
+}
+
+if (!function_exists('currency')) {
+    function currency($amount = null)
+    {
+        return ($amount) ? '$'.$amount : '$';
+    }
+}

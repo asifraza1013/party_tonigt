@@ -23,6 +23,6 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
-        "sweetalert2": "^11.4.33"
+        "sweetalert2": "^11.6.8"
     }
 }
