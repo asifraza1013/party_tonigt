@@ -52,8 +52,8 @@ class PostManagementController extends Controller
     {
         $rules = [
             'title' => 'required|string',
-            'ticket_price' => 'required_if:ticket_detail,==,on|numeric',
-            'total_tickets' => 'required_if:ticket_detail,==,on|numeric',
+            // 'ticket_price' => 'required_if:ticket_detail,==,on|numeric',
+            // 'total_tickets' => 'required_if:ticket_detail,==,on|numeric',
             'images' => 'required|array',
             'images.*' => 'required|mimes:jpeg,png,jpg|max:2048',
         ];
