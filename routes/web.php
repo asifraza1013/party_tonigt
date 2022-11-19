@@ -78,7 +78,7 @@ Route::group(['prefix' => 'admin'], function() {
     Route::get('/', [MainController::class, 'adminLogin'])->name('admin.login');
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function() {
+Route::group(['middleware' => ['auth:web'], 'prefix' => 'admin'], function() {
 
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     Route::get('/redirect', [HomeController::class, 'redirect'])->name('redirect');

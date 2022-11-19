@@ -274,6 +274,6 @@ if (!function_exists('uploadImage')) {
         $image_url = $upload_path.$image_full_name;
         $success = $query->move($upload_path,$image_full_name);
 
-        return asset('client/'.$image_url);
+        return asset($image_url);
     }
 }
