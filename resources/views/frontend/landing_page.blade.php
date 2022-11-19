@@ -145,16 +145,20 @@
                                                     ? '<span>following</span?'
                                                     : '<span class="red">not following</span>' !!}</span></h5>
                                         <p class="text-muted" style="margin: 0px">
+                                            @if($post->friends)
                                             @foreach ($post->friends as $value)
                                                 {{ $loop->first ? '' : ', ' }}
                                                 <span class="nice"><a href="#">{{ '@' . $value }}</a></span>
                                             @endforeach
+                                            @endif
                                         </p>
                                         <p class="text-muted" style="margin: 0px">
+                                            @if($post->tags)
                                             @foreach ($post->tags as $value)
                                                 {{ $loop->first ? '' : ', ' }}
                                                 <span class="nice"><a href="#">{{ '#' . $value->name }}</a></span>
                                             @endforeach
+                                            @endif
                                         </p>
                                         <p class="text-muted">Published about {{ calculatePostTitme($post) }}</p>
                                     </div>

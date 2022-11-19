@@ -30,8 +30,8 @@ class CreatePostsTable extends Migration
             $table->json('post_tags')->nullable();
             $table->json('friends')->nullable();
 
-            $table->string('price')->nullable(0);
-            $table->string('total_tickets')->nullable(0);
+            $table->string('price')->nullable();
+            $table->string('total_tickets')->nullable();
 
             $table->boolean('is_event')->default(false);
             $table->boolean('is_story')->default(false);
