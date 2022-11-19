@@ -20,6 +20,7 @@ class UserApp extends Authenticatable
     ];
 
     public $timestamps = true;
+    protected $appends = ['full_name'];
     protected $fillable = [
         'google_id',
         'apple_id',

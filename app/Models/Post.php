@@ -14,7 +14,7 @@ class Post extends Model
     use HasTags;
     protected $casts = [
         'media_url' => 'array',
-        'tags' => 'array',
+        'post_tags' => 'array',
         'friends' => 'array',
     ];
     protected $appends = ['cate_name'];
@@ -30,6 +30,10 @@ class Post extends Model
     public function user()
     {
         return $this->belongsTo('App\Models\UserApp','user_apps_id');
+    }
+    public function comment()
+    {
+        return $this->hasMany('App\Models\Comment');
     }
     public function getCateNameAttribute()
     {

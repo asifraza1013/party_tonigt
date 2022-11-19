@@ -28,15 +28,15 @@
                                 aria-haspopup="true" aria-expanded="false">Timeline<span><img
                                         src="{{ asset('frontend/images/down-arrow.png') }}" alt="" /></span></a>
                             <ul class="dropdown-menu login">
-                                <li><a href="#">Timeline</a></li>
+                                <li><a href="{{ route('client.news.feed') }}">Timeline</a></li>
                                 <li><a href="#">Timeline About</a></li>
-                                <li><a href="#">Timeline Album</a></li>
+                                {{-- <li><a href="#">Timeline Album</a></li> --}}
                                 <li><a href="#">Timeline Friends</a></li>
-                                <li><a href="#">Edit: Basic Info</a></li>
+                                <li><a href="#">Edit: User Profile</a></li>
                                 <li><a href="#">Change Password</a></li>
                             </ul>
                         </li>
-                        <li class="dropdown"><a href="contact.html">Contact</a></li>
+                        <li class="dropdown"><a href="#">Contact</a></li>
                     </ul>
                     <form class="navbar-form navbar-right hidden-sm">
                         <div class="form-group">

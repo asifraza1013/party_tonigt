@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\PostManagementController as ApiPostManagementController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Web\PostManagementController;
 use App\Http\Controllers\Web\UserController as WebUserController;
@@ -48,6 +49,10 @@ Route::group(['middleware' => ['auth:client'], 'as' => 'client.'], function() {
     Route::get('/home', [PostManagementController::class, 'newsFeed']);
 
     Route::post('/create_event', [PostManagementController::class, 'createNewEvent'])->name('create.new.event');
+
+    Route::post('/follow_user', [PostManagementController::class, 'follow'])->name('follow.user');
+    Route::post('web_like_post', [ApiPostManagementController::class, 'like'])->name('like.user.post');
+    Route::post('web_dislike_post', [ApiPostManagementController::class, 'dislike'])->name('dislike.user.post');
 });
 // Route::post('/search_users', [LoginController::class, 'searchUserTagFriends'])->name('client.search.users');
 

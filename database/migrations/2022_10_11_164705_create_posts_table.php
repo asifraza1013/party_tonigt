@@ -27,7 +27,7 @@ class CreatePostsTable extends Migration
             $table->text('youtube_link')->nullable();
 
             $table->json('media_url')->nullable();
-            $table->json('tags')->nullable();
+            $table->json('post_tags')->nullable();
             $table->json('friends')->nullable();
 
             $table->string('price')->nullable(0);

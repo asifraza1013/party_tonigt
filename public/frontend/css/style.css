@@ -941,6 +941,9 @@ textarea{
 .d-block{
     display: block;
 }
+.red{
+    color: red;
+}
 /*feed-block and ul.online-users css available below*/
 
 /*==================================================

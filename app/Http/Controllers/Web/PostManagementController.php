@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Post;
+use App\Models\UserApp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -29,10 +30,18 @@ class PostManagementController extends Controller
         $user = Auth::user();
         $user->following_count = $user->followings()->count();
         $user->followers_count = $user->followers()->count();
+
+        // get suggested people
+        $following = array_merge($user->followings()->pluck('user_follower.following_id')->all());
+        array_push($following, $user->id);
+
+        // TODO: get most followed poeople as suggestion
+        $suggestedUsers = UserApp::whereNotIn('id', $following)->where('status', 1)->inRandomOrder()->limit(10)->get();
         $posts = $this->getAllPost($request);
 
         return view('frontend.landing_page', compact([
             'posts',
+            'suggestedUsers',
             'title',
             'user',
         ]));
@@ -76,7 +85,7 @@ class PostManagementController extends Controller
         if($post->type) $post->type = $request->type;
         $post->media_url = $imageUrls;
         if(!empty($request->category)) $post->category = $request->category;
-        if(!empty($request->tags)) $post->tags = $request->tags;
+        if(!empty($request->tags)) $post->post_tags = $request->tags;
         if(!empty($request->friends)) $post->friends = $request->friends;
         if(!empty($request->ticket_price)) $post->price = $request->ticket_price;
         if(!empty($request->total_tickets)) $post->total_tickets = $request->total_tickets;
@@ -87,6 +96,43 @@ class PostManagementController extends Controller
         return redirect()->back()->with('success', 'New Event created successfully.');
     }
 
+
+    public function follow(Request $request)
+    {
+        $this->validate($request, [
+            'user_id' => 'required|numeric|exists:user_apps,id',
+        ]);
+        $success = 0; // no action
+        $userProfile = UserApp::where('id', $request->user_id)->first();
+        if(!$userProfile){
+            return redirect()->back()->with('error', 'Opps! can\'t find user. Please try with correct data.');
+        }
+        $currentProfile = $request->user();
+        if ($currentProfile->isFollowing($userProfile)) {
+            $currentProfile->unfollow($userProfile);
+            $success = 1; // unfollow
+        } else {
+            $currentProfile->follow($userProfile);
+            $success = 2; // follow
+            Log::info('unfollow-- ');
+            $detail = (object)[
+                'is_follow' => true,
+                'type' => 3,
+                'detail' => $userProfile->user_name.' Started Following You',
+                'user_id' => $currentProfile->id,
+                'user_name' => $currentProfile->user_name,
+                'user_image' => $currentProfile->image,
+            ];
+            Log::info('unfollow 2-- ');
+            // $userProfile->notify(new InAppNotifications($userProfile, $detail));
+        }
+        return redirect()->back()->with('success', ($success == 1) ? 'Unfollow user success' : 'Follow user success');
+        // return response()->json([
+        //     'status' => true,
+        //     'code' => 1011,
+        //     'message' =>  ($success == 1) ? 'Unfollow user success' : 'Follow user success'
+        // ]);
+    }
 
     public function getAllPost($request)
     {
@@ -127,7 +173,8 @@ class PostManagementController extends Controller
             $following = array_merge($profile->followings()->pluck('user_follower.id')->all(), [$profile->id]);
             $posts = Post::with(['user', 'tags'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->orderBy('created_at', 'desc');
         }else{
-            $posts = Post::with(['user', 'tags'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->orderBy('created_at', 'desc');
+            $posts = Post::with(['user', 'tags', 'comment', 'comment.user'])
+            ->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->orderBy('created_at', 'desc');
         }
         if ($request->has('type') && $request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');

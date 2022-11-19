@@ -33,6 +33,13 @@ Route::group(['namespace' => 'Api'], function () {
 });
 
 Route::group(['namespace' => 'Api'], function () {
+
+    // web client APIs
+    // Route::group([ 'middleware' => 'auth:client'], function () {
+    //     Route::post('web_like_post', [PostManagementController::class, 'like'])->name('like.user.post');
+    //     Route::post('web_dislike_post', [PostManagementController::class, 'dislike'])->name('dislike.user.post');
+    // });
+
     Route::group([ 'middleware' => 'auth:sanctum'], function () {
         Route::post('cate_list', 'PostManagementController@cateList');
         Route::post('create_post', [PostManagementController::class, 'createPost']);
