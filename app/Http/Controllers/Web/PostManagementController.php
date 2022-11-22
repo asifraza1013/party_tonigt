@@ -189,4 +189,15 @@ class PostManagementController extends Controller
         $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
         return $posts;
     }
+
+    /**
+     * open landing page
+    */
+    public function openLandingPage()
+    {
+        $title = 'Landing Page';
+        return view('frontend.open_landing', compact([
+            'title',
+        ]));
+    }
 }

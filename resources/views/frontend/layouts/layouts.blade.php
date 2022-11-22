@@ -102,6 +102,14 @@
     <script src="{{ asset('frontend/js/script.js') }}"></script>
 
     @yield('js')
+
+    <script>
+        $(document).ready(function () {
+            setTimeout(() => {
+                $('#header').addClass('visible')
+            }, 100);
+        });
+    </script>
 </body>
 
 </html>

@@ -30,6 +30,7 @@ Route::post('login', [WebUserController::class, 'webClientEmailLogin'])->name('c
 Route::post('signup', [WebUserController::class, 'webClientSignUp'])->name('client.registration');
 Route::get('account_verification/{user}/{sendOtp?}', [WebUserController::class, 'webClientVerification'])->name('client.verification.screen');
 Route::post('account_verification', [WebUserController::class, 'webClientOtpVerification'])->name('client.verification.submit');
+Route::get('/', [PostManagementController::class, 'openLandingPage'])->name('open.landing.page');
 
 Auth::routes(['login' => false]);
 
@@ -45,8 +46,7 @@ Auth::routes(['login' => false]);
 |
 */
 Route::group(['middleware' => ['auth:client'], 'as' => 'client.'], function() {
-    Route::get('/', [PostManagementController::class, 'newsFeed'])->name('news.feed');
-    Route::get('/home', [PostManagementController::class, 'newsFeed']);
+    Route::get('/home', [PostManagementController::class, 'newsFeed'])->name('news.feed');
 
     Route::post('/create_event', [PostManagementController::class, 'createNewEvent'])->name('create.new.event');
 
