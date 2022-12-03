@@ -165,10 +165,10 @@
                                     <div class="reaction">
                                         <a class="btn text-green like-post" pl-count="{{ $post->like_count }}"
                                             p-id="{{ $post->id }}"><i
-                                                class="icon ion-thumbsup"></i>{{ $post->like_count }}</a>
-                                        <a class="btn text-red dislike-post" pd-count="{{ $post->dislike_count }}"
+                                                class="icon ion-thumbsup"></i>{{ ($user->id == $post->user_apps_id) ? $post->like_count : null }}</a>
+                                        {{-- <a class="btn text-red dislike-post" pd-count="{{ $post->dislike_count }}"
                                             p-id="{{ $post->id }}"><i
-                                                class="fa fa-thumbs-down"></i>{{ $post->dislike_count }} </a>
+                                                class="fa fa-thumbs-down"></i>{{ $post->dislike_count }} </a> --}}
                                     </div>
                                     <div class="line-divider"></div>
                                     <div class="post-text">
