@@ -164,7 +164,7 @@
                                     </div>
                                     <div class="reaction">
                                         <a class="btn text-green like-post" pl-count="{{ $post->like_count }}"
-                                            p-id="{{ $post->id }}"><i
+                                            p-id="{{ $post->id }}" p-user={{ $post->user_apps_id }}><i
                                                 class="icon ion-thumbsup"></i>{{ ($user->id == $post->user_apps_id) ? $post->like_count : null }}</a>
                                         {{-- <a class="btn text-red dislike-post" pd-count="{{ $post->dislike_count }}"
                                             p-id="{{ $post->id }}"><i
@@ -364,12 +364,13 @@
             });
 
             $('.like-post').on('click', function(){
-                console.log('like clicked');
+
+                let userId = @JSON($user->id);
                 let postid = $(this).attr('p-id');
-                console.log('postId', postid);
+                let postUser = $(this).attr('p-user');
                 let currentCount = $(this).attr('pl-count');
-                console.log('currentCOunt ', currentCount);
-                $(this).html('<i class="icon ion-thumbsup"></i>'+ parseInt(currentCount) + 1);
+                currentCount = parseInt(currentCount) + 1;
+                $(this).html('<i class="icon ion-thumbsup"></i>'+ currentCount);
                 let route = "{{ route('client.like.user.post') }}"
                 likePost(postid, route)
             })
