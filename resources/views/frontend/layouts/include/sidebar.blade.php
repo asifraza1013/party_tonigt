@@ -45,7 +45,7 @@
                                 <li><a href="#">Timeline About</a></li>
                                 {{-- <li><a href="#">Timeline Album</a></li> --}}
                                 <li><a href="#">Timeline Friends</a></li>
-                                <li><a href="#">Edit: User Profile</a></li>
+                                <li><a href="{{ route('client.edit.user.profile') }}">Edit: User Profile</a></li>
                                 <li><a href="#">Change Password</a></li>
                             </ul>
                         </li>

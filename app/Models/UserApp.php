@@ -29,6 +29,7 @@ class UserApp extends Authenticatable
         'admin_approved',
         'enable_notifications',
         'status',
+        'gender',
         'first_name',
         'last_name',
         'email',
@@ -64,6 +65,27 @@ class UserApp extends Authenticatable
     public function getFullNameAttribute()
     {
         return $this->first_name.' '.$this->last_name;
+    }
+    public function getMonthAttribute()
+    {
+        if($this->dob){
+            $exploaded = explode('-', $this->dob);
+            return $exploaded[1];
+        }
+    }
+    public function getDayAttribute()
+    {
+        if($this->dob){
+            $exploaded = explode('-', $this->dob);
+            return $exploaded[0];
+        }
+    }
+    public function getYearAttribute()
+    {
+        if($this->dob){
+            $exploaded = explode('-', $this->dob);
+            return $exploaded[2];
+        }
     }
 
     public function needsToApproveFollowRequests()

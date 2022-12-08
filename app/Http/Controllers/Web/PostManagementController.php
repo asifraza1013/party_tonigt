@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\UserApp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -30,15 +31,8 @@ class PostManagementController extends Controller
         $user = Auth::user();
         $user->following_count = $user->followings()->count();
         $user->followers_count = $user->followers()->count();
-
-        // get suggested people
-        $following = array_merge($user->followings()->pluck('user_follower.following_id')->all());
-        array_push($following, $user->id);
-
-        // TODO: get most followed poeople as suggestion
-        $suggestedUsers = UserApp::whereNotIn('id', $following)->where('status', 1)->inRandomOrder()->limit(10)->get();
+        $suggestedUsers = getSuggestedUsers($user);
         $posts = $this->getAllPost($request);
-
         return view('frontend.landing_page', compact([
             'posts',
             'suggestedUsers',
@@ -179,8 +173,11 @@ class PostManagementController extends Controller
         if ($request->has('type') && $request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
         }
-        if ($request->user_id) {
-            $posts = $posts->where('user_apps_id', $request->user_id)->orderBy('created_at', 'desc');
+        if ($request->has('events') && $request->events) {
+            $posts = $posts->where('is_event', 1)->orderBy('created_at', 'desc');
+        }
+        if ($request->user) {
+            $posts = $posts->where('user_apps_id', Crypt::decrypt($request->user))->orderBy('created_at', 'desc');
         }
         $posts = $posts->where('is_story', false);
         if ($request->is_story) {
@@ -200,4 +197,6 @@ class PostManagementController extends Controller
             'title',
         ]));
     }
+
+
 }

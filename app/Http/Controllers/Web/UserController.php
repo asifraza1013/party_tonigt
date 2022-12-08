@@ -159,4 +159,125 @@ class UserController extends Controller
         Auth::guard('client')->attempt(['email' => $request->email, 'password' => $request->password], false);
         return redirect(route('client.news.feed'))->with('success', 'Logged in successfully.');
     }
+
+    public function editProfile(Request $request)
+    {
+        $title = 'Edit Profile Detalis';
+        $user = Auth::user();
+        $user->followers_count = $user->followers()->count();
+        $suggestedUsers = getSuggestedUsers($user);
+        return view('frontend.profile.profile', compact([
+            'title',
+            'suggestedUsers',
+            'user'
+        ]));
+    }
+
+    public function updatedUserProfileDetails(Request $request)
+    {
+        // dd($request->all());
+        $rules = [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+
+        if (count($errors) > 0)
+        {
+            return redirect()->back()->with('error', $errors);
+        }
+
+        $user = Auth::user();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->country = $request->country;
+        $user->gender = $request->gender;
+        $user->about_me = $request->about_me;
+        if($request->day && $request->month && $request->year){
+            $user->dob = $request->day.'-'.$request->month.'-'.$request->year;
+        }
+        $user->save();
+        return redirect()->back()->with('success', 'Profile information updated successfully!');
+    }
+
+    public function userAccountSetting(Request $request)
+    {
+        $title = 'Account Setting';
+        $user = Auth::user();
+        $user->followers_count = $user->followers()->count();
+        $suggestedUsers = getSuggestedUsers($user);
+        return view('frontend.profile.settings', compact([
+            'suggestedUsers',
+            'title',
+            'user',
+        ]));
+    }
+
+    public function getChangePassword(Request $request)
+    {
+        $title = 'Change Account Password';
+        $user = Auth::user();
+        $user->followers_count = $user->followers()->count();
+        $suggestedUsers = getSuggestedUsers($user);
+        return view('frontend.profile.change_password', compact([
+            'suggestedUsers',
+            'title',
+            'user',
+        ]));
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $rules = [
+            'old_password' => 'required|string',
+            'new_password' => 'confirmed|max:8|different:old_password',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        $errors = error_msg_serialize($validator->errors());
+        if (count($errors) > 0)
+        {
+            return redirect()->back()->with('error', $errors);
+        }
+
+        $user = Auth::user();
+        if(!Hash::check($request->old_password, $user->password)) return redirect()->back()->with('error', 'Old password is not correct. Please try correct one.');
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+        return redirect()->back()->with('success', 'Password Changed successfully');
+    }
+
+    public function userTimeLine(Request $request)
+    {
+        $title = 'Timeline';
+        $user = Auth::user();
+        $user->following_count = $user->followings()->count();
+        $user->followers_count = $user->followers()->count();
+        $suggestedUsers = getSuggestedUsers($user);
+        $postController = new PostManagementController();
+        $posts = $postController->getAllPost($request);
+        return view('frontend.profile.timeline', compact([
+            'posts',
+            'suggestedUsers',
+            'title',
+            'user',
+        ]));
+    }
+
+    public function userFollowersList(Request $request)
+    {
+        $title = 'Friends List';
+        $user = Auth::user();
+        $followers = $user->followers;
+        $user->followers_count = $user->followers()->count();
+        $suggestedUsers = getSuggestedUsers($user);
+        return view('frontend.profile.friends', compact([
+            'followers',
+            'suggestedUsers',
+            'title',
+            'user',
+        ]));
+    }
 }

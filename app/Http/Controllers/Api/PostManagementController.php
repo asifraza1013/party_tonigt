@@ -43,6 +43,14 @@ class PostManagementController extends Controller
             // 'is_story' => 'nullable|string',
         ]);
 
+        $imageUrls = [];
+        if(!empty($request->media)){
+            foreach($request->media as $key=>$image){
+               $imageUrl =  uploadImage($image);
+               array_push($imageUrls, $imageUrl);
+            }
+        }
+
         $profile = $request->user();
 
         $post = new Post();
@@ -55,7 +63,7 @@ class PostManagementController extends Controller
         if(!empty($request->youtube_link)) $post->youtube_link = $request->youtube_link;
         if(!empty($request->background_link)) $post->background_link = $request->background_link;
         if($post->type) $post->type = $request->type;
-        if(!empty($request->media)) $post->media_url = $request->media;
+        if(!empty($request->media)) $post->media_url = $imageUrls;
         if(!empty($request->category)) $post->category = $request->category;
         if(!empty($request->tags)) $post->tags = $request->tags;
         if(!empty($request->friends)) $post->friends = $request->friends;

@@ -1,9 +1,10 @@
 <?php
 
-use App\DeviceToken;
 use App\OrderHasStatus;
 use App\Status;
 use Carbon\Carbon;
+use App\DeviceToken;
+use App\Models\UserApp;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
@@ -275,5 +276,18 @@ if (!function_exists('uploadImage')) {
         $success = $query->move($upload_path,$image_full_name);
 
         return asset($image_url);
+    }
+}
+
+if (!function_exists('getSuggestedUsers')) {
+    function getSuggestedUsers($user)
+    {
+       // get suggested people
+       $following = array_merge($user->followings()->pluck('user_follower.following_id')->all());
+       array_push($following, $user->id);
+
+       // TODO: get most followed poeople as suggestion
+       $suggestedUsers = UserApp::whereNotIn('id', $following)->where('status', 1)->inRandomOrder()->limit(10)->get();
+        return $suggestedUsers;
     }
 }

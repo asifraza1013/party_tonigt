@@ -53,6 +53,14 @@ Route::group(['middleware' => ['auth:client'], 'as' => 'client.'], function() {
     Route::post('/follow_user', [PostManagementController::class, 'follow'])->name('follow.user');
     Route::post('web_like_post', [ApiPostManagementController::class, 'like'])->name('like.user.post');
     Route::post('web_dislike_post', [ApiPostManagementController::class, 'dislike'])->name('dislike.user.post');
+
+    Route::get('edit_profile', [WebUserController::class, 'editProfile'])->name('edit.user.profile');
+    Route::post('edit_profile', [WebUserController::class, 'updatedUserProfileDetails'])->name('update.user.profile');
+    Route::get('account_settings', [WebUserController::class, 'userAccountSetting'])->name('user.account.settings');
+    Route::get('change_password', [WebUserController::class, 'getChangePassword'])->name('user.change.password');
+    Route::post('change_password', [WebUserController::class, 'updatePassword'])->name('user.updated.password');
+    Route::get('timeline', [WebUserController::class, 'userTimeLine'])->name('user.time.line');
+    Route::get('friends', [WebUserController::class, 'userFollowersList'])->name('user.friends');
 });
 // Route::post('/search_users', [LoginController::class, 'searchUserTagFriends'])->name('client.search.users');
 
