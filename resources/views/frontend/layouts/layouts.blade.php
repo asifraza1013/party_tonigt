@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,700i" rel="stylesheet">
 
     <!--Favicon-->
-    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/images/fav.png') }}" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('frontend/images/party_tonight_light.png') }}" />
     @yield('css')
 </head>
 

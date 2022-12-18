@@ -5,6 +5,8 @@ use App\Status;
 use Carbon\Carbon;
 use App\DeviceToken;
 use App\Models\UserApp;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
 
@@ -287,7 +289,13 @@ if (!function_exists('getSuggestedUsers')) {
        array_push($following, $user->id);
 
        // TODO: get most followed poeople as suggestion
-       $suggestedUsers = UserApp::whereNotIn('id', $following)->where('status', 1)->inRandomOrder()->limit(10)->get();
+       $suggestedUsers = UserApp::whereNotIn('id', $following)->where('status', 1)->inRandomOrder()->limit(6)->get();
         return $suggestedUsers;
     }
+}
+
+function getChatServer(){
+    $user = Auth::user();
+    if($user) return 'http://localhost:8400/conversations?u='.Crypt::encrypt($user->id);
+    else return false;
 }

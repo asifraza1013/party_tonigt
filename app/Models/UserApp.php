@@ -11,7 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserApp extends Authenticatable
 {
-    use Notifiable, HasApiTokens, Followable;
+    use Notifiable, HasApiTokens, Followable, HasFactory;
 
     protected $guard = 'client';
     protected $guarded=['id'];

@@ -40,10 +40,10 @@
                             <div><a href="newsfeed-people-nearby.html">People Nearby</a></div>
                         </li> --}}
                         <li><i class="icon ion-ios-people-outline"></i>
-                            <div><a href="#">Friends</a></div>
+                        <div><a href="{{ route('client.user.friends') }}">Friends</a></div>
                         </li>
                         <li><i class="icon ion-chatboxes"></i>
-                            <div><a href="#">Messages</a></div>
+                            <div><a href="{{ getChatServer() }}">Messages</a></div>
                         </li>
                         {{-- <li><i class="icon ion-images"></i>
                             <div><a href="newsfeed-images.html">Images</a></div>
