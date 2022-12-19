@@ -296,6 +296,6 @@ if (!function_exists('getSuggestedUsers')) {
 
 function getChatServer(){
     $user = Auth::user();
-    if($user) return 'http://localhost:8400/conversations?u='.Crypt::encrypt($user->id);
+    if($user) return 'http://partychat.bitwork.tech/conversations?u='.Crypt::encrypt($user->id);
     else return false;
 }
