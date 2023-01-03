@@ -67,7 +67,7 @@
                         <h6>About</h6>
                         <ul class="footer-links">
                             <li><a href="#">About us</a></li>
-                            <li><a href="#">Contact us</a></li>
+                            <li><a href="{{ route('contact.us') }}">Contact us</a></li>
                             <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
                             <li><a href="{{ route('terms.and.conditions') }}">Terms</a></li>
                         </ul>
