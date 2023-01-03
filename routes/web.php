@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PostManagementController as ApiPostManagementController;
+use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Web\PostManagementController;
 use App\Http\Controllers\Web\UserController as WebUserController;
@@ -31,6 +32,10 @@ Route::post('signup', [WebUserController::class, 'webClientSignUp'])->name('clie
 Route::get('account_verification/{user}/{sendOtp?}', [WebUserController::class, 'webClientVerification'])->name('client.verification.screen');
 Route::post('account_verification', [WebUserController::class, 'webClientOtpVerification'])->name('client.verification.submit');
 Route::get('/', [PostManagementController::class, 'openLandingPage'])->name('open.landing.page');
+Route::get('privacy_policy', [FrontEndController::class, 'privacyPolicy'])->name('privacy.policy');
+Route::get('terms', [FrontEndController::class, 'termsConditions'])->name('terms.and.conditions');
+Route::get('contact_us', [FrontEndController::class, 'contactusIndex'])->name('contact.us');
+Route::post('contact_us', [FrontEndController::class, 'submitContactUs'])->name('submit.contact.us');
 
 Auth::routes(['login' => false]);
 

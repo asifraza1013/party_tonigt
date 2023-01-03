@@ -68,16 +68,19 @@
                         <ul class="footer-links">
                             <li><a href="#">About us</a></li>
                             <li><a href="#">Contact us</a></li>
-                            <li><a href="#">Privacy Policy</a></li>
-                            <li><a href="#">Terms</a></li>
+                            <li><a href="{{ route('privacy.policy') }}">Privacy Policy</a></li>
+                            <li><a href="{{ route('terms.and.conditions') }}">Terms</a></li>
                         </ul>
                     </div>
                     <div class="col-md-3 col-sm-3">
                         <h6>Contact Us</h6>
                         <ul class="contact">
-                            <li><i class="icon ion-ios-telephone-outline"></i>+1 (234) 222 0754</li>
-                            <li><i class="icon ion-ios-email-outline"></i>info@party-tonight.com</li>
-                            <li><i class="icon ion-ios-location-outline"></i>228 Park Ave S NY, USA</li>
+                            <li><i class="icon ion-ios-telephone-outline"></i>9549370181</li>
+                            <li><i class="icon ion-ios-email-outline"></i>info@partytonight.us</li>
+                            <li><i class="icon ion-ios-location-outline"></i>
+                                3750 NW 28th St, Unit 207
+                                Miami , FL 33142
+                                United States</li>
                         </ul>
                     </div>
                 </div>
