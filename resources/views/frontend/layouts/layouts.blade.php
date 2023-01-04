@@ -75,7 +75,7 @@
                     <div class="col-md-3 col-sm-3">
                         <h6>Contact Us</h6>
                         <ul class="contact">
-                            <li><i class="icon ion-ios-telephone-outline"></i>9549370181</li>
+                            <li><i class="icon ion-ios-telephone-outline"></i>954-888-8022</li>
                             <li><i class="icon ion-ios-email-outline"></i>info@partytonight.us</li>
                             <li><i class="icon ion-ios-location-outline"></i>
                                 3750 NW 28th St, Unit 207

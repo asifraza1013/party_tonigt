@@ -43,7 +43,7 @@
                                     <h4 class="grey">Reach Us</h4>
                                     <div class="reach"><span class="phone-icon"><i
                                                 class="icon ion-android-call"></i></span>
-                                        <p>9549370181</p>
+                                        <p>954-888-8022</p>
                                     </div>
                                     <div class="reach"><span class="phone-icon"><i class="icon ion-email"></i></span>
                                         <p>info@partytonight.us</p>
