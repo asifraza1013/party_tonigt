@@ -57,9 +57,9 @@
                     <div class="col-md-3 col-sm-3">
                         <h6>For individuals</h6>
                         <ul class="footer-links">
-                            <li><a href="{{ route('login', ['filter' => 'register']) }}">Signup</a></li>
-                            <li><a href="{{ route('login', ['filter' => 'login']) }}">login</a></li>
-                            <li><a href="{{ route('client.news.feed') }}">Explore</a></li>
+                            {{-- <li><a href="#">Signup</a></li> --}}
+                            {{-- <li><a href="#">login</a></li> --}}
+                            <li><a href="#">Explore</a></li>
                             <li><a href="#">Mobile App</a></li>
                         </ul>
                     </div>
