@@ -52,13 +52,14 @@ Route::group(['namespace' => 'Api'], function () {
 
         Route::post('upload_media', 'PostManagementController@uploadMedia');
         Route::post('update_profile_image', 'LoginController@updateProfileImage');
-        // Route::post('user_profile', 'LoginController@userProfile');
+        Route::post('user_profile', [LoginController::class, 'userProfile']);
         Route::post('update_profile_info', 'PostManagementController@updateProfileInfo');
 
         Route::post('follow_user', [PostManagementController::class, 'follow']);
         Route::post('follower_list', [PostManagementController::class, 'followers']);
         Route::post('following_list', [PostManagementController::class, 'following']);
         Route::post('search_user', [PostManagementController::class, 'searchUser']);
+        Route::post('search_user_by_ids', [PostManagementController::class, 'userByIds']);
 
         // Notifications section
         Route::post('notification_list', 'PostManagementController@getNotificationList');

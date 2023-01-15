@@ -41,12 +41,12 @@ class UserApp extends Authenticatable
 
     public function activities()
     {
-        return $this->hasManyThrough('App\Model\PostActivity', 'App\Model\Post', 'user_apps_id', 'post_id');
+        return $this->hasManyThrough('App\Models\PostActivity', 'App\Models\Post', 'user_apps_id', 'post_id');
     }
 
     public function posts()
     {
-        return $this->hasMany('App\Model\Post', 'user_apps_id');
+        return $this->hasMany('App\Models\Post', 'user_apps_id');
     }
 
     // public function followers()
@@ -93,4 +93,6 @@ class UserApp extends Authenticatable
         // Your custom logic here
         return (bool) $this->private;
     }
+
+    // Follower::attachFollowStatus(Collection $followables)
 }

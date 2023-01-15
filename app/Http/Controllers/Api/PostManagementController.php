@@ -69,6 +69,8 @@ class PostManagementController extends Controller
         if(!empty($request->friends)) $post->friends = $request->friends;
         if(!empty($request->price)) $post->price = $request->price;
         if(!empty($request->total_tickets)) $post->total_tickets = $request->total_tickets;
+        if(!empty($request->address)) $post->address = $request->address;
+        if(!empty($request->event_date)) $post->event_date = $request->event_date;
 
         if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
         $post->save();
@@ -230,7 +232,7 @@ class PostManagementController extends Controller
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             }
         ];
-        $post = Post::where('id', $request->post_id)->where('is_story', false);
+        $post = Post::with(['user'])->where('id', $request->post_id)->where('is_story', false);
         if($request->is_story){
             $post = $post->where('is_story', true);
         }
@@ -372,7 +374,7 @@ class PostManagementController extends Controller
     public function follow(Request $request)
     {
         $this->validate($request, [
-            'user_id' => 'required|numeric|exists:user_apps,id',
+            'user_id' => 'required|numeric',
         ]);
         $success = 0; // no action
         $userProfile = UserApp::where('id', $request->user_id)->first();
@@ -380,7 +382,7 @@ class PostManagementController extends Controller
             return response()->json([
                 'status' => false,
                 'code' => 1010,
-                'message' => 'Sorry! Can\'t find user. Please with correct data'
+                'message' => 'Sorry! Can\'t find user. Please try with correct data'
             ]);
         }
         $currentProfile = $request->user();
@@ -496,11 +498,40 @@ class PostManagementController extends Controller
     public function searchUser(Request $request)
     {
         $search = $request->user_name;
+        $currentProfile = $request->user();
         $profiles = UserApp::where('user_name', 'like', '%' . $search . '%')
         ->orWhere('first_name', 'like', '%' . $search . '%')
         ->orWhere('last_name', 'like', '%' . $search . '%')
         ->orWhere('email', 'like', '%' . $search . '%')
         ->withCount(['followings', 'followers'])->paginate(config('constants.paginate_per_page'));
+
+        foreach ($profiles as $key => $value) {
+            $followingStatus = $currentProfile->isFollowing($value);
+            $followerStatus = $currentProfile->isFollowedBy($value);
+            $profiles[$key]->is_following = $followingStatus;
+            $profiles[$key]->is_follower = $followerStatus;
+
+        }
+        return response()->json($profiles);
+    }
+
+    public function userByIds(Request $request)
+    {
+        $this->validate($request, [
+            'user_ids' => 'required|array',
+        ]);
+
+        $currentProfile = $request->user();
+        $profiles = UserApp::whereIn('id', $request->user_ids)
+        ->withCount(['followings', 'followers'])->paginate(config('constants.paginate_per_page'));
+
+        foreach ($profiles as $key => $value) {
+            $followingStatus = $currentProfile->isFollowing($value);
+            $followerStatus = $currentProfile->isFollowedBy($value);
+            $profiles[$key]->is_following = $followingStatus;
+            $profiles[$key]->is_follower = $followerStatus;
+
+        }
         return response()->json($profiles);
     }
 
