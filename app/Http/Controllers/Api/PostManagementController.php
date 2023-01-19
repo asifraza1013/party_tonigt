@@ -390,7 +390,7 @@ class PostManagementController extends Controller
             $currentProfile->unfollow($userProfile);
             $success = 1; // unfollow
         } else {
-            $currentProfile->follow($userProfile);
+            $userProfile->follow($currentProfile);
             $success = 2; // follow
             Log::info('unfollow-- ');
             $detail = (object)[
