@@ -46,8 +46,8 @@ class PostManagementController extends Controller
         $imageUrls = [];
         if(!empty($request->media)){
             foreach($request->media as $key=>$image){
-               $imageUrl =  uploadImage($image);
-               array_push($imageUrls, $imageUrl);
+            //    $imageUrl =  uploadImage($image);
+               array_push($imageUrls, 'https://picsum.photos/500');
             }
         }
 
