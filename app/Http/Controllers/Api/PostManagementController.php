@@ -104,13 +104,13 @@ class PostManagementController extends Controller
             'post_activities as comment_count' => function ($query) {
                 $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             },
-            'post_activities as liked' => function ($query) use ($profile) {
+            'post_activities as is_liked' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_LIKE'))->where('user_apps_id', $profile->id);
             },
-            'post_activities as disliked' => function ($query) use ($profile) {
+            'post_activities as is_disliked' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_DISLIKE'))->where('user_apps_id', $profile->id);
             },
-            'post_activities as commented' => function ($query) use ($profile) {
+            'post_activities as is_commented' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_COMMENT'))->where('user_apps_id', $profile->id);
             },
             // 'followers as is_following' => function ($query) use ($profile) {
@@ -120,10 +120,14 @@ class PostManagementController extends Controller
             // 'followers as followers_count'
         ];
 
-        $blockedUsers = $profile->followings()->where('is_blocked', true)->pluck('user_follower.following_id')->all();
+        $allFollowings = $profile->followings()->get();
+        $userFollowingList = collect($allFollowings);
+        $blockedUsers = $userFollowingList->where('is_blocked', true)->pluck('id')->all();
+        $userFollowingList = $userFollowingList->pluck('id')->all();
+
         Log::info('BlockedUsers --'.json_encode($blockedUsers));
         if($request->has('following') && $request->following){
-            $following = array_merge($profile->followings()->pluck('user_follower.id')->all(), [$profile->id]);
+            $following = array_merge($userFollowingList, [$profile->id]);
             $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->orderBy('created_at', 'desc');
         }else{
             $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->orderBy('created_at', 'desc');
@@ -145,6 +149,7 @@ class PostManagementController extends Controller
             'code' =>  1002,
             'message' =>  'Get available post list success',
             'data' =>  $posts,
+            'following_list' => $userFollowingList
         ]);
     }
 
@@ -167,18 +172,18 @@ class PostManagementController extends Controller
             'post_activities as comment_count' => function ($query) {
                 $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             },
-            'post_activities as liked' => function ($query) use ($profile) {
+            'post_activities as is_liked' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_LIKE'));
             },
-            'post_activities as disliked' => function ($query) use ($profile) {
+            'post_activities as is_disliked' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_DISLIKE'));
             },
-            'post_activities as commented' => function ($query) use ($profile) {
+            'post_activities as is_commented' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
-            }
+            },
         ];
 
         $posts = Post::where('user_apps_id', $profile->id)->where('status', 'Active')->where('is_story', false);
@@ -219,15 +224,15 @@ class PostManagementController extends Controller
             'post_activities as comment_count' => function ($query) {
                 $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             },
-            'post_activities as liked' => function ($query) use ($profile) {
+            'post_activities as is_liked' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_LIKE'));
             },
-            'post_activities as disliked' => function ($query) use ($profile) {
+            'post_activities as is_disliked' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_DISLIKE'));
             },
-            'post_activities as commented' => function ($query) use ($profile) {
+            'post_activities as is_commented' => function ($query) use ($profile) {
                 $query->where('user_apps_id', $profile->id)
                     ->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             }
@@ -400,6 +405,7 @@ class PostManagementController extends Controller
                 'user_id' => $currentProfile->id,
                 'user_name' => $currentProfile->user_name,
                 'user_image' => $currentProfile->image,
+                'user' => $userProfile
             ];
             Log::info('unfollow 2-- ');
             // $userProfile->notify(new InAppNotifications($userProfile, $detail));
@@ -725,13 +731,13 @@ class PostManagementController extends Controller
             'post_activities as comment_count' => function ($query) {
                 $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
             },
-            'post_activities as liked' => function ($query) use ($profile) {
+            'post_activities as is_liked' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_LIKE'))->where('user_apps_id', $profile->id);
             },
-            'post_activities as disliked' => function ($query) use ($profile) {
+            'post_activities as is_disliked' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_DISLIKE'))->where('user_apps_id', $profile->id);
             },
-            'post_activities as commented' => function ($query) use ($profile) {
+            'post_activities as is_commented' => function ($query) use ($profile) {
                     $query->where('type', config('constants.POST_ACTIVITY_COMMENT'))->where('user_apps_id', $profile->id);
             }
         ];
@@ -751,7 +757,8 @@ class PostManagementController extends Controller
             'status' => true,
             'code' => 2005,
             'message' => 'Get post like list success.',
-            'data' => $posts
+            'data' => $posts,
+            'user' => $profile
         ]);
     }
 
