@@ -242,7 +242,7 @@ class PostManagementController extends Controller
             $post = $post->where('is_story', true);
         }
         $post = $post->withCount($countsQuery)->first();
-        $post->user->is_following = $profile->isFollowing($post->user);
+        if($post) $post->user->is_following = $profile->isFollowing($post->user);
         return response()->json([
             'status' => true,
             'code' => 1003,
@@ -396,7 +396,7 @@ class PostManagementController extends Controller
             $currentProfile->unfollow($userProfile);
             $success = 1; // unfollow
         } else {
-            $userProfile->follow($currentProfile);
+            $currentProfile->follow($userProfile);
             $success = 2; // follow
             Log::info('unfollow-- ');
             $detail = (object)[
