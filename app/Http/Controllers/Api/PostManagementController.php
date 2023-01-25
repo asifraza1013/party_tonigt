@@ -242,6 +242,7 @@ class PostManagementController extends Controller
             $post = $post->where('is_story', true);
         }
         $post = $post->withCount($countsQuery)->first();
+        $post->user->is_following = $profile->isFollowing($post->user);
         return response()->json([
             'status' => true,
             'code' => 1003,
