@@ -444,7 +444,7 @@ class PostManagementController extends Controller
                array_push($followerList, $flw);
             }
         }else{
-            $list = $userProfile->followings()->get();
+            $list = $userProfile->followers()->get();
             // check if current user is fowllowing from list
             $followerList = [];
             foreach($list as $key=>$flw){
@@ -478,7 +478,7 @@ class PostManagementController extends Controller
                     'message' => 'Profile not found for requested user. Please try with correct data'
                 ]);
             }
-            $list =  $otherUser->followers()->get();
+            $list =  $otherUser->followings()->get();
 
             // check if current user is fowllowing from list
             $followerList = [];
@@ -488,13 +488,13 @@ class PostManagementController extends Controller
                array_push($followerList, $flw);
             }
         }else{
-            $followerList = $userProfile->followers()->get();
+            $followerList = $userProfile->followings()->get();
         }
         return response()->json([
             'status' => true,
             'code' => 1013,
             'message' => 'Get following list success',
-            'data' => $userProfile->followings()->paginate(config('constants.paginate_per_page'))
+            'data' => $followerList
         ]);
     }
 

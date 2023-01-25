@@ -352,12 +352,15 @@ class LoginController extends Controller
         }
 
         // get userpost ids
-       $voterCount = DB::table('post_activities')->where('post_activities.type', config('constants.POST_ACTIVITY_LIKE'))
-        ->whereIn('post_id', $postIds)->distinct('user_apps_id')->count();
-
-        $user->following_count = $user->followings()->count();
-        $user->followers_count = $user->followers()->count();
-        $user->voter_count = $voterCount;
+    //    $voterCount = DB::table('post_activities')->where('post_activities.type', config('constants.POST_ACTIVITY_LIKE'))
+    //     ->whereIn('post_id', $postIds)->distinct('user_apps_id')->count();
+        $userFollower = $user->followers()->get();
+        $userFollowings = $user->followings()->get();
+        $user->following_count = count($userFollowings);
+        $user->followers_count = count($userFollower);
+        $user->followers_list = $userFollower;
+        $user->followings_list = $userFollowings;
+        // $user->voter_count = $voterCount;
 
         // get user posts
         $posts = null;
