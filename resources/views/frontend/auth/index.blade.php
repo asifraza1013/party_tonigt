@@ -18,7 +18,7 @@
           <!-- Register/Login Tabs-->
           <div class="reg-options">
             <ul class="nav nav-tabs">
-              {{-- <li class="{{ ($selectedTab == 'register') ? 'active' : null}}"><a href="#register" data-toggle="tab">Register</a></li> --}}
+              <li class="{{ ($selectedTab == 'register') ? 'active' : null}}"><a href="#register" data-toggle="tab">Register</a></li>
               <li class="{{ ($selectedTab == 'login') ? 'active' : null}}"><a href="#login" data-toggle="tab">Login</a></li>
             </ul><!--Tabs End-->
           </div>
