@@ -21,9 +21,9 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 @guest
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    {{-- <ul class="nav navbar-nav navbar-right main-menu">
+                    <ul class="nav navbar-nav navbar-right main-menu">
                         <li class="dropdown"><a href="{{ route('login') }}">Login</a></li>
-                    </ul> --}}
+                    </ul>
                     <form class="navbar-form navbar-right hidden-sm">
                         <div class="form-group">
                             <i class="icon ion-android-search"></i>
