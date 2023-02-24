@@ -163,6 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Overtrue\LaravelFollow\FollowServiceProvider::class,
         // LaravelFCM\FCMServiceProvider::class,
+        Hootlex\Friendships\FriendshipsServiceProvider::class,
 
         /*
          * Package Service Providers...

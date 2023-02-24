@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\PostManagementController;
 use App\Http\Controllers\ApiLoginController;
+use App\Http\Controllers\FriendsManagmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -78,6 +79,24 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('block_user', [PostManagementController::class, 'blockUser']);
         Route::post('unblock_user', [PostManagementController::class, 'unblockUser']);
         Route::post('blocked_list', [PostManagementController::class, 'blockedUserList']);
+
+        // Friends management section
+        Route::group([ 'prefix' => 'friends'], function () {
+            Route::post('send_request', [FriendsManagmentController::class, 'sendFriendRequest']);
+            Route::post('frienship_status', [FriendsManagmentController::class, 'checkFriendshipStatus']);
+            Route::post('frienship_request_status', [FriendsManagmentController::class, 'checkFriendRequestStatus']);
+            Route::post('frienship_request_status_others', [FriendsManagmentController::class, 'checkFriendRequestStatusForOthers']);
+            Route::post('accept_request', [FriendsManagmentController::class, 'acceptFriendRequest']);
+            Route::post('reject_request', [FriendsManagmentController::class, 'rejectFriendRequest']);
+            Route::post('unfriend', [FriendsManagmentController::class, 'unfriendUser']);
+            Route::post('get_single_friendship', [FriendsManagmentController::class, 'getSingleFrienship']);
+            Route::get('get_all_friendship', [FriendsManagmentController::class, 'getAllFrienship']);
+            Route::get('get_pending_frienship', [FriendsManagmentController::class, 'getPendingFriendships']);
+            Route::get('get_accepted_frienship', [FriendsManagmentController::class, 'getAcceptedFriendships']);
+            Route::get('get_pending_friend_requests', [FriendsManagmentController::class, 'getFriendRequests']);
+            Route::get('get_friends_count', [FriendsManagmentController::class, 'getFriendsCount']);
+            Route::get('get_friends_list_details', [FriendsManagmentController::class, 'getFriends']);
+        });
     });
 
 });

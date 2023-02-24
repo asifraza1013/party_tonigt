@@ -7,11 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Overtrue\LaravelFollow\Followable;
 use Laravel\Sanctum\HasApiTokens;
+// use Hootlex\Friendships\Traits\Friendable;
+use App\Traits\FriendableTempFix;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class UserApp extends Authenticatable
 {
-    use Notifiable, HasApiTokens, Followable, HasFactory;
+    use Notifiable, HasApiTokens, Followable, HasFactory, FriendableTempFix;
+    // use Friendable;
 
     protected $guard = 'client';
     protected $guarded=['id'];
