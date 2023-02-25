@@ -65,7 +65,7 @@ class PostManagementController extends Controller
         if($post->type) $post->type = $request->type;
         if(!empty($request->media)) $post->media_url = $imageUrls;
         if(!empty($request->category)) $post->category = $request->category;
-        if(!empty($request->tags)) $post->tags = $request->tags;
+        if(!empty($request->tags)) $post->post_tags = $request->tags;
         if(!empty($request->friends)) $post->friends = $request->friends;
         if(!empty($request->price)) $post->price = $request->price;
         if(!empty($request->total_tickets)) $post->total_tickets = $request->total_tickets;
