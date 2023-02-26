@@ -34,6 +34,7 @@ class PostManagementController extends Controller
      */
     public function createPost(Request $request)
     {
+        Log::info('postPayload '.json_encode($request->all()));
         $this->validate($request, [
             'title' => 'required|string',
             'description' => 'nullable|string',
@@ -43,11 +44,24 @@ class PostManagementController extends Controller
             // 'is_story' => 'nullable|string',
         ]);
 
+        $mediaType = 'image';
         $imageUrls = [];
         if(!empty($request->media)){
             foreach($request->media as $key=>$image){
             //    $imageUrl =  uploadImage($image);
-               array_push($imageUrls, 'https://picsum.photos/500');
+            //    array_push($imageUrls, 'https://picsum.photos/500');
+
+            $mediaType = get_string_between($image, 'data:', '/');
+            Log::info('mediaType - '.$mediaType);
+
+            $mediaExten = get_string_between($image, 'data:'.$mediaType.'/', ';base64');
+            Log::info('mediaExten - '.$mediaExten);
+
+            $image = str_replace('data:'.$mediaType.'/'.$mediaExten.';base64,', '', $image);
+            $imageName = Str::random(20).'.'.$mediaExten;
+
+                File::put(public_path('client/'.$imageName), base64_decode($image));
+                array_push($imageUrls, asset('client/'.$imageName));
             }
         }
 
@@ -63,6 +77,7 @@ class PostManagementController extends Controller
         if(!empty($request->youtube_link)) $post->youtube_link = $request->youtube_link;
         if(!empty($request->background_link)) $post->background_link = $request->background_link;
         if($post->type) $post->type = $request->type;
+        else $post->type = $mediaType;
         if(!empty($request->media)) $post->media_url = $imageUrls;
         if(!empty($request->category)) $post->category = $request->category;
         if(!empty($request->tags)) $post->post_tags = $request->tags;
