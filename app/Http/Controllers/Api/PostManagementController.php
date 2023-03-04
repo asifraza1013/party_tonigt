@@ -88,6 +88,7 @@ class PostManagementController extends Controller
         if(!empty($request->event_date)) $post->event_date = $request->event_date;
 
         if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
+        if($request->is_event) $post->is_event = true;
         $post->save();
 
         if(!empty($request->tags)) $post->attachTags($request->tags);
@@ -143,7 +144,11 @@ class PostManagementController extends Controller
         Log::info('BlockedUsers --'.json_encode($blockedUsers));
         if($request->has('following') && $request->following){
             $following = array_merge($userFollowingList, [$profile->id]);
-            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->orderBy('created_at', 'desc');
+            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->where('is_event', true)->orderBy('created_at', 'desc');
+        }
+        else if($request->has('friends') && $request->friends){
+            $following = array_merge($userFollowingList, [$profile->id]);
+            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->where('is_event', false)->orderBy('created_at', 'desc');
         }else{
             $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->orderBy('created_at', 'desc');
         }
