@@ -205,14 +205,21 @@ class LoginController extends Controller
         $user = $request->user();
 
         $image = $request->image;  // your base64 encoded
-        // $image = str_replace('data:image/png;base64,', '', $image);
-        $image = str_replace(' ', '+', $image);
-        $imageName = Str::random(10).'.png';
-        // $imageName = str_random(10).'.'.'png';
-        if($user->image){
-            File::delete(public_path('users/'.$user->image));
-        }
+        $mediaType = get_string_between($image, 'data:', '/');
+        Log::info('mediaType - '.$mediaType);
+
+        $mediaExten = get_string_between($image, 'data:'.$mediaType.'/', ';base64');
+        Log::info('mediaExten - '.$mediaExten);
+
+        $image = str_replace('data:'.$mediaType.'/'.$mediaExten.';base64,', '', $image);
+        $imageName = Str::random(20).'.'.$mediaExten;
+
         File::put(public_path('uploads/'.$imageName), base64_decode($image));
+
+        if($user->image){
+            File::delete(public_path('uploads/'.$user->image));
+        }
+
         $user->image = asset('uploads/'.$imageName);
         $user->save();
         return response()->json([
