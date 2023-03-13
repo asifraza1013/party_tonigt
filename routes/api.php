@@ -52,7 +52,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('dislike_post', [PostManagementController::class, 'dislike']);
 
         Route::post('upload_media', 'PostManagementController@uploadMedia');
-        Route::post('update_profile_image', 'LoginController@updateProfileImage');
+        // Route::post('update_profile_image', 'LoginController@updateProfileImage');
+        Route::post('update_profile_image', [LoginController::class, 'updateProfileImage']);
         Route::post('user_profile', [LoginController::class, 'userProfile']);
         Route::post('update_profile_info', 'PostManagementController@updateProfileInfo');
 
