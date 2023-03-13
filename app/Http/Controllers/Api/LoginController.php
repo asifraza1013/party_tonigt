@@ -214,10 +214,10 @@ class LoginController extends Controller
         $image = str_replace('data:'.$mediaType.'/'.$mediaExten.';base64,', '', $image);
         $imageName = Str::random(20).'.'.$mediaExten;
 
-        File::put(public_path('uploads/'.$imageName), base64_decode($image));
+        File::put(public_path('client/'.$imageName), base64_decode($image));
 
         if($user->image){
-            File::delete(public_path('uploads/'.$user->image));
+            File::delete(public_path('client/'.$user->image));
         }
 
         $user->image = asset('uploads/'.$imageName);
