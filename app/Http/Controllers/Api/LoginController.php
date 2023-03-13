@@ -220,7 +220,7 @@ class LoginController extends Controller
             File::delete(public_path('client/'.$user->image));
         }
 
-        $user->image = asset('uploads/'.$imageName);
+        $user->image = asset('client/'.$imageName);
         $user->save();
         return response()->json([
             'status' => true,
