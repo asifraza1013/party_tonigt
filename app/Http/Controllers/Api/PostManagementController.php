@@ -7,12 +7,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostActivity;
 use App\Models\Tag;
+use App\Models\Transactions;
 use App\Models\UserApp;
+use App\Notifications\InAppNotifications;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
+use Stripe;
 
 class PostManagementController extends Controller
 {
@@ -330,7 +333,7 @@ class PostManagementController extends Controller
                 'liked_by_image' => $profile->image,
                 'type' => 1,
             ];
-            // $user->notify(new InAppNotifications($user, $detail));
+            $user->notify(new InAppNotifications($user, $detail));
             return response()->json([
                 'status' => true,
                 'code' => 1007,
@@ -429,7 +432,7 @@ class PostManagementController extends Controller
                 'user' => $userProfile
             ];
             Log::info('unfollow 2-- ');
-            // $userProfile->notify(new InAppNotifications($userProfile, $detail));
+            $userProfile->notify(new InAppNotifications($userProfile, $detail));
         }
         return response()->json([
             'status' => true,
@@ -594,7 +597,7 @@ class PostManagementController extends Controller
     public function getNotificationList(Request $request)
     {
         $user = $request->user();
-        $notifications = DB::table('notifications')->where('notifiable_id', $user->id)->get();
+        $notifications = DB::table('laravel_notifications')->where('notifiable_id', $user->id)->get();
         $data = [];
 
         foreach($notifications as $key=>$noti){
@@ -653,7 +656,7 @@ class PostManagementController extends Controller
             'notification_id' => 'required|string',
         ]);
 
-        DB::table('notifications')->where('id', $request->notification_id)->update([
+        DB::table('laravel_notifications')->where('id', $request->notification_id)->update([
             'read_at' => date('Y-m-d h:i:s')
         ]);
         return response()->json([
@@ -667,7 +670,7 @@ class PostManagementController extends Controller
      * mark all as read
      */
     public function markAllAsRead(Request $request){
-        DB::table('notifications')->where('read_at', null)->update([
+        DB::table('laravel_notifications')->where('read_at', null)->update([
             'read_at' => date('Y-m-d h:i:s')
         ]);
         return response()->json([
@@ -971,5 +974,77 @@ class PostManagementController extends Controller
             'message' => 'blocked user list successful',
             'list' => $users
         ]);
+    }
+
+    /**
+     * make payment to buy tickets
+     */
+    public function buyTicket(Request $request)
+    {
+
+        // Stripe\Stripe::setApiKey(env('STRIPE_KEY'));
+
+        // $token = Stripe\Token::create(array(
+        // "card" => array(
+        //     "number" => "4242424242424242",
+        //     "exp_month" => 1,
+        //     "exp_year" => 2024,
+        //     "cvc" => "314"
+        // )
+        // ));
+
+        // return response()->json(['token' => $token]);
+
+        $this->validate($request, [
+            'post_id' => 'required|numeric',
+            'stripe_token' => 'required|string',
+        ]);
+
+        $user = $request->user();
+        $post = Post::where('id', $request->post_id)->where('is_event', 1)->first();
+        if(is_null($post)) return response()->json(['status' => false, 'code' => 2015, 'message' => 'can\'t find post. please try again with correct data.']);
+        if($post->remainig_tickts < 1)  return response()->json(['status' => false, 'code' => 2016, 'message' => 'No more available tickts.']);
+
+        $amount = $post->price;
+        $description = 'Event booking, Event Name: '.$post->title.', amount: '.$request->amount.'';
+
+        try {
+            Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+
+        Stripe\Charge::create ([
+            "amount" => $amount * 100,
+                "currency" => "usd",
+                "source" => $request->stripe_token,
+                "description" => $description
+        ]);
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'code' => 2016, 'message' => $e->getMessage()]);
+        }
+
+        $post->remainig_tickts = $post->remainig_tickts - 1;
+        $post->save();
+
+        $transaction = new Transactions();
+        $transaction->post_id = $post->id;
+        $transaction->user_id = $user->id;
+        $transaction->stripe_token = $request->stripe_token;
+        $transaction->amount = $amount;
+        $transaction->description = $description;
+        $transaction->status = 1; // success
+        $transaction->save();
+
+
+        $detail = (object)[
+            'detail' => $user->user_name.' Buy Ticket',
+            'post_id' => $post->id,
+            'post_name' => $post->title,
+            'post_image' => $post->media_url,
+            'purchased_by' => $user->id,
+            'purchased_by_image' => $user->image,
+            'type' => 1,
+        ];
+        $user->notify(new InAppNotifications($user, $detail));
+
+        return response()->json(['message' => 'Booking created successfully.', 'status' => true, 'code' => 2017]);
     }
 }

@@ -80,6 +80,12 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('block_user', [PostManagementController::class, 'blockUser']);
         Route::post('unblock_user', [PostManagementController::class, 'unblockUser']);
         Route::post('blocked_list', [PostManagementController::class, 'blockedUserList']);
+        Route::post('buy_ticket', [PostManagementController::class, 'buyTicket']);
+
+        // Notifications section
+        Route::post('notification_list', [PostManagementController::class, 'getNotificationList']);
+        Route::post('read_single_noti', [PostManagementController::class, 'markSingleAsRead']);
+        Route::post('read_all_noti', [PostManagementController::class, 'markAllAsRead']);
 
         // Friends management section
         Route::group([ 'prefix' => 'friends'], function () {
