@@ -6,6 +6,7 @@ use App\Helpers\PostHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\PostActivity;
+use App\Models\Report;
 use App\Models\Tag;
 use App\Models\Transactions;
 use App\Models\UserApp;
@@ -856,6 +857,37 @@ class PostManagementController extends Controller
             'status' => true,
             'code' => 2010,
             'message' => 'Post reported successfully'
+        ]);
+    }
+
+    /**
+     * edit specific POST
+     */
+    public function editPost(Request $request)
+    {
+        $this->validate($request, [
+            'post_id' => 'required|numeric',
+        ]);
+
+        $post = Post::where('id', $request->post_id)->first();
+        if(is_null($post)) return response()->json([ 'status' => false, 'code' => 5001, 'message' => 'Given post is not valid.']);
+
+        if(!empty($request->title)) $post->title = $request->title;
+        if(!empty($request->description)) $post->description = $request->description;
+        if(!empty($request->price)) $post->price = $request->price;
+        if(!empty($request->total_tickets)) $post->total_tickets = $request->total_tickets;
+        if(!empty($request->total_tickets)) $post->remainig_tickts = $post->remainig_tickts + $request->total_tickets;
+        if(!empty($request->event_date)) $post->event_date = $request->event_date;
+        if(!empty($request->address)) $post->address = $request->address;
+        if(!empty($request->lng)) $post->lng = $request->lng;
+        if(!empty($request->lat)) $post->lat = $request->lat;
+        if(!empty($request->address)) $post->address = $request->address;
+        $post->save();
+        return response()->json([
+            'status' => true,
+            'code' => 2011,
+            'message' => 'Post updated successfully',
+            'post' => $post
         ]);
     }
 

@@ -44,6 +44,7 @@ Route::group(['namespace' => 'Api'], function () {
     Route::group([ 'middleware' => 'auth:sanctum'], function () {
         Route::post('cate_list', 'PostManagementController@cateList');
         Route::post('create_post', [PostManagementController::class, 'createPost']);
+        Route::post('edit_post', [PostManagementController::class, 'editPost']);
         Route::post('post_list', [PostManagementController::class, 'allPosts']);
         Route::post('my_posts', [PostManagementController::class, 'myposts']);
         Route::post('post_detail', [PostManagementController::class, 'postDetail']);
@@ -73,8 +74,8 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('liked_post_list', [PostManagementController::class, 'postLikeList']);
 
         // report section
-        Route::post('report_post', 'PostManagementController@reportPost');
-        Route::post('report_reason_list', 'PostManagementController@reportReasonList');
+        Route::post('report_post', [PostManagementController::class, 'reportPost']);
+        Route::post('report_reason_list', [PostManagementController::class, 'reportReasonList']);
 
         // block user section
         Route::post('block_user', [PostManagementController::class, 'blockUser']);
