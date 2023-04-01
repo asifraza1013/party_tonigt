@@ -23,7 +23,7 @@ class UserApp extends Authenticatable
     ];
 
     public $timestamps = true;
-    protected $appends = ['full_name'];
+    // protected $appends = ['full_name'];
     protected $fillable = [
         'google_id',
         'apple_id',
@@ -67,10 +67,10 @@ class UserApp extends Authenticatable
     {
         return $this->password;
     }
-    public function getFullNameAttribute()
-    {
-        return $this->first_name.' '.$this->last_name;
-    }
+    // public function getFullNameAttribute()
+    // {
+    //     return $this->first_name.' '.$this->last_name;
+    // }
     public function getMonthAttribute()
     {
         if($this->dob){
