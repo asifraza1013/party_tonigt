@@ -841,11 +841,12 @@ class PostManagementController extends Controller
         //     $user->image = $request->image;
         // }
 
-        $user->update();
+        $user->save();
         return response()->json([
             'status' => true,
             'code' => 2006,
             'message' => 'Update user profile success',
+            'user' => $user
         ]);
     }
 
