@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddNewColumnFullNameInUsers extends Migration
+class AddNewColumnFullNameInUserApps extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddNewColumnFullNameInUsers extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('user_apps', function (Blueprint $table) {
             $table->string('full_name')->nullable();
-            $table->string('about')->nullable();
         });
     }
 
@@ -26,8 +25,8 @@ class AddNewColumnFullNameInUsers extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            //
+        Schema::table('user_apps', function (Blueprint $table) {
+            $table->dropColumn('full_name');
         });
     }
 }

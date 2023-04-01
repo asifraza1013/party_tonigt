@@ -40,6 +40,8 @@ class UserApp extends Authenticatable
         'phone',
         'status',
         'user_name',
+        'full_name',
+        'about',
     ];
 
     public function activities()
