@@ -825,9 +825,9 @@ class PostManagementController extends Controller
         if($request->has('phone') && $request->phone){
             $user->phone = $request->phone;
         }
-        if($request->has('image') && $request->image){
-            $user->image = $request->image;
-        }
+        // if($request->has('image') && $request->image){
+        //     $user->image = $request->image;
+        // }
 
         $user->update();
         return response()->json([

@@ -56,7 +56,8 @@ Route::group(['namespace' => 'Api'], function () {
         // Route::post('update_profile_image', 'LoginController@updateProfileImage');
         Route::post('update_profile_image', [LoginController::class, 'updateProfileImage']);
         Route::post('user_profile', [LoginController::class, 'userProfile']);
-        Route::post('update_profile_info', 'PostManagementController@updateProfileInfo');
+        Route::post('delete_account', [LoginController::class, 'deleteAccount']);
+        Route::post('update_profile_info', [PostManagementController::class, 'updateProfileInfo']);
 
         Route::post('follow_user', [PostManagementController::class, 'follow']);
         Route::post('follower_list', [PostManagementController::class, 'followers']);

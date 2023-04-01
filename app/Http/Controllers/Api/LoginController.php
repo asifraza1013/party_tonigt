@@ -461,4 +461,19 @@ class LoginController extends Controller
         }
         return response()->json($users);
     }
+
+    /**
+     * delete user account
+     */
+    public function deleteAccount(Request $request)
+    {
+        $this->validate($request, [
+            'password' => 'required|string',
+        ]);
+
+        $user = $request->user();
+        if(!Hash::check($request->password, $user->password)) return response()->json([ 'status' => false, 'code' => 5001, 'message' => 'Please try again with correct password.']);
+        UserApp::where('id', $user->id)->delete();
+        return response()->json([ 'status' => true, 'code' => 5002, 'message' => 'Account deleted successfully.']);
+    }
 }
