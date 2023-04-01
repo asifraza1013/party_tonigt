@@ -810,6 +810,13 @@ class PostManagementController extends Controller
         if($request->has('first_name') && $request->first_name){
             $user->first_name = $request->first_name;
         }
+        if($request->has('descrption') && $request->descrption){
+            $user->about = $request->descrption;
+        }
+        if($request->has('user_name') && $request->user_name){
+            $user->user_name = $request->user_name;
+            $user->full_name = $request->user_name;
+        }
         if($request->has('last_name') && $request->last_name){
             $user->last_name = $request->last_name;
         }
