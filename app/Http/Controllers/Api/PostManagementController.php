@@ -807,7 +807,7 @@ class PostManagementController extends Controller
         $user->dob = $request->dob;
         $user->gender = $request->gender;
         $user->phone = $request->phone;
-        if(!empty($request->email)){
+        if(!empty($request->email) && $request->email != $user->email){
             $exist = UserApp::where('email', $request->email)->first();
             if($exist) return response()->json([ 'status' => false, 'code' => 2006, 'message' => 'Email is already in use for another account.']);
             $user->email = $request->email;
