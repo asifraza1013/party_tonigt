@@ -109,6 +109,7 @@ class PostManagementController extends Controller
      */
     public function allPosts(Request $request)
     {
+        Log::info('postRequest '.json_encode($request->all()));
         $profile = $request->user();
         $limit = $request->limit ? $request->limit : config('constants.paginate_per_page');
         $page = $request->page && $request->page > 0 ? $request->page : 1;
