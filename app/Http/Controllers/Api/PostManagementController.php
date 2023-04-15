@@ -155,7 +155,9 @@ class PostManagementController extends Controller
             $following = array_merge($userFollowingList, [$profile->id]);
             $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->whereIn('user_apps_id', $following)->where('is_event', false)->orderBy('created_at', 'desc');
         }else{
-            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)->orderBy('created_at', 'desc');
+            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)
+            ->where('is_event', true)
+            ->orderBy('created_at', 'desc');
         }
         if ($request->has('type') && $request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
