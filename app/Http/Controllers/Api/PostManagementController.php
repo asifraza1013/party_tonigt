@@ -92,6 +92,7 @@ class PostManagementController extends Controller
         if(!empty($request->event_date)) $post->event_date = $request->event_date;
 
         if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
+        if(!empty($request->price) && !empty($request->total_tickets)) $post->remainig_tickts = $request->total_tickets;
         if($request->is_event) $post->is_event = true;
         $post->save();
 
@@ -1051,7 +1052,7 @@ class PostManagementController extends Controller
         $user = $request->user();
         $post = Post::where('id', $request->post_id)->where('is_event', 1)->first();
         if(is_null($post)) return response()->json(['status' => false, 'code' => 2015, 'message' => 'can\'t find post. please try again with correct data.']);
-        if($post->remainig_tickts < 1)  return response()->json(['status' => false, 'code' => 2016, 'message' => 'No more available tickts.']);
+        // if($post->remainig_tickts < 1)  return response()->json(['status' => false, 'code' => 2016, 'message' => 'No more available tickts.']);
 
         $amount = $post->price;
         $description = 'Event booking, Event Name: '.$post->title.', amount: '.$request->amount.'';
@@ -1060,7 +1061,7 @@ class PostManagementController extends Controller
             Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
 
         Stripe\Charge::create ([
-            "amount" => $amount * 100,
+                "amount" => $amount * 100,
                 "currency" => "usd",
                 "source" => $request->stripe_token,
                 "description" => $description
