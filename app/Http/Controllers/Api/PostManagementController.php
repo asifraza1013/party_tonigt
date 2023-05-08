@@ -11,6 +11,7 @@ use App\Models\Tag;
 use App\Models\Transactions;
 use App\Models\UserApp;
 use App\Notifications\InAppNotifications;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -178,6 +179,77 @@ class PostManagementController extends Controller
             'message' =>  'Get available post list success',
             'data' =>  $posts,
             'following_list' => $userFollowingList
+        ]);
+    }
+
+    public function allEvents(Request $request)
+    {
+        $profile = $request->user();
+        $limit = $request->limit ? $request->limit : config('constants.paginate_per_page');
+        $page = $request->page && $request->page > 0 ? $request->page : 1;
+        $skip = ($page - 1) * $limit;
+
+        $countsQuery = [
+            'post_activities as like_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_LIKE'));
+            },
+            'post_activities as dislike_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_DISLIKE'));
+            },
+            'post_activities as comment_count' => function ($query) {
+                $query->where('type', config('constants.POST_ACTIVITY_COMMENT'));
+            },
+            'post_activities as is_liked' => function ($query) use ($profile) {
+                    $query->where('type', config('constants.POST_ACTIVITY_LIKE'))->where('user_apps_id', $profile->id);
+            },
+            'post_activities as is_disliked' => function ($query) use ($profile) {
+                    $query->where('type', config('constants.POST_ACTIVITY_DISLIKE'))->where('user_apps_id', $profile->id);
+            },
+            'post_activities as is_commented' => function ($query) use ($profile) {
+                    $query->where('type', config('constants.POST_ACTIVITY_COMMENT'))->where('user_apps_id', $profile->id);
+            },
+        ];
+
+        $allFollowings = $profile->followings()->get();
+        $userFollowingList = collect($allFollowings);
+        $blockedUsers = $userFollowingList->where('is_blocked', true)->pluck('id')->all();
+        $userFollowingList = $userFollowingList->pluck('id')->all();
+
+        if($request->purchased){
+            $purchased = Transactions::where('user_id', $profile->id)->pluck('id')->all();
+            $posts = Post::with(['user'])->where('status', 'Active')
+            ->whereIn('id', $purchased)
+            ->orderBy('created_at', 'desc');
+        }else{
+            $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)
+            ->where('is_event', true)
+            ->orderBy('created_at', 'desc');
+        }
+        if ($request->has('type') && $request->type) {
+            $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
+        }
+        if ($request->user_id) {
+            $posts = $posts->where('user_apps_id', $request->user_id)->orderBy('created_at', 'desc');
+        }
+        $posts = $posts->where('is_story', false);
+        if ($request->is_story) {
+            $posts->where('is_story', true);
+        }
+
+        if($request->start_date && $request->end_date){
+            $start = Carbon::parse($request->start_date);
+            $end = Carbon::parse($request->end_date);
+            $posts = $posts->whereDate('event_date','<=',$end->format('Y-m-d'))
+            ->whereDate('created_at','>=',$start->format('Y-m-d'));
+        }
+
+        $posts = $posts->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+
+        return response()->json([
+            'status' =>  true,
+            'code' =>  1002,
+            'message' =>  'Get available Event list success',
+            'data' =>  $posts,
         ]);
     }
 
