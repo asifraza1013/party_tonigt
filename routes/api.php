@@ -47,6 +47,7 @@ Route::group(['namespace' => 'Api'], function () {
         Route::post('edit_post', [PostManagementController::class, 'editPost']);
         Route::post('post_list', [PostManagementController::class, 'allPosts']);
         Route::post('events_list', [PostManagementController::class, 'allEvents']);
+
         Route::post('my_posts', [PostManagementController::class, 'myposts']);
         Route::post('post_detail', [PostManagementController::class, 'postDetail']);
         Route::post('remove_post', [PostManagementController::class, 'destroy']);
