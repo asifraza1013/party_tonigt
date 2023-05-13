@@ -308,3 +308,13 @@ function get_string_between($string, $start, $end){
         $len = strpos($string, $end, $ini) - $ini;
         return substr($string, $ini, $len);
 }
+
+function generateUserName($firstName, $lastName){
+    $username = strtolower($firstName) . '.' . strtolower($lastName);
+    $userCount = UserApp::where('user_name', $username)->count();
+    if ($userCount > 0) {
+        $username = $username . $userCount;
+    }
+    return $username;
+
+}

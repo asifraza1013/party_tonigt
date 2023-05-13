@@ -60,7 +60,7 @@ class LoginController extends Controller
         }
 
         $createUser= new UserApp;
-        $createUser->user_name = $request->user_name;
+        $createUser->user_name = generateUserName($request->first_name, $request->last_name);
         $createUser->first_name = $request->first_name;
         $createUser->last_name = $request->last_name;
         $createUser->country = $request->country;
@@ -476,4 +476,5 @@ class LoginController extends Controller
         UserApp::where('id', $user->id)->delete();
         return response()->json([ 'status' => true, 'code' => 5002, 'message' => 'Account deleted successfully.']);
     }
+
 }
