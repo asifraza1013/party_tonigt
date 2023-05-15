@@ -89,19 +89,19 @@ return [
         ],
         (object) [
             'id' => 3,
-            'name' => 'Tale',
+            'name' => 'electronic',
         ],
         (object) [
             'id' => 4,
-            'name' => 'Poem',
+            'name' => 'art',
         ],
         (object) [
             'id' => 5,
-            'name' => 'Visual Art',
+            'name' => 'reggaeton',
         ],
         (object) [
             'id' => 6,
-            'name' => 'Animales',
+            'name' => 'sport',
         ],
     ],
     'month_list' => [

@@ -84,7 +84,7 @@ class PostManagementController extends Controller
         if($post->type) $post->type = $request->type;
         else $post->type = $mediaType;
         if(!empty($request->media)) $post->media_url = $imageUrls;
-        if(!empty($request->category)) $post->category = $request->category;
+        if(!empty($request->topic)) $post->category = $request->topic;
         if(!empty($request->tags)) $post->post_tags = $request->tags;
         if(!empty($request->friends)) $post->friends = $request->friends;
         if(!empty($request->price)) $post->price = $request->price;
@@ -94,6 +94,8 @@ class PostManagementController extends Controller
 
         if(!empty($request->price) && !empty($request->total_tickets)) $post->is_event = true;
         if(!empty($request->price) && !empty($request->total_tickets)) $post->remainig_tickts = $request->total_tickets;
+        if(!empty($request->lng)) $post->lng = $request->lng;
+        if(!empty($request->lat)) $post->lat = $request->lat;
         if($request->is_event) $post->is_event = true;
         $post->save();
 
@@ -220,6 +222,11 @@ class PostManagementController extends Controller
             $posts = Post::with(['user'])->where('status', 'Active')
             ->whereIn('id', $purchased)
             ->orderBy('created_at', 'desc');
+        }else if($request->liked){
+            $likedPost = DB::table('post_activities')->where('user_apps_id', $profile->id)->where('type', config('constants.POST_ACTIVITY_LIKE'))->pluck('id')->all();
+            $posts = Post::with(['user'])->where('status', 'Active')
+            ->whereIn('id', $likedPost)
+            ->orderBy('created_at', 'desc');
         }else{
             $posts = Post::with(['user'])->where('status', 'Active')->whereNotIn('user_apps_id', $blockedUsers)
             ->where('is_event', true)
@@ -227,6 +234,9 @@ class PostManagementController extends Controller
         }
         if ($request->has('type') && $request->type) {
             $posts = $posts->where('type', $request->type)->orderBy('created_at', 'desc');
+        }
+        if ($request->has('topic') && $request->topic) {
+            $posts = $posts->where('category', $request->topic)->orderBy('created_at', 'desc');
         }
         if ($request->user_id) {
             $posts = $posts->where('user_apps_id', $request->user_id)->orderBy('created_at', 'desc');
@@ -286,21 +296,31 @@ class PostManagementController extends Controller
             },
         ];
 
-        $posts = Post::where('user_apps_id', $profile->id)->where('status', 'Active')->where('is_story', false);
+        $events = Post::where('user_apps_id', $profile->id)->where('status', 'Active')
+        ->where('is_event', true)
+        ->where('is_story', false);
+
+        $stories = Post::where('user_apps_id', $profile->id)->where('status', 'Active')
+        ->where('is_event', false)
+        ->where('is_story', false);
 
         if ($request->type) {
-            $posts = $posts->where('type', $request->type);
+            $events = $events->where('type', $request->type);
+            $stories = $stories->where('type', $request->type);
         }
         if ($request->is_story) {
-            $posts = $posts->where('is_story', true);
+            $events = $events->where('is_story', true);
+            $stories = $stories->where('is_story', true);
         }
 
-        $posts = $posts->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+        $events = $events->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
+        $stories = $stories->orderBy('created_at', 'desc')->withCount($countsQuery)->paginate(config('constants.paginate_per_page'));
         return response()->json([
             'status' => true,
             'code' => 1009,
             'message' => 'Get post list success',
-            'data' => $posts
+            'events' => $events,
+            'stories' => $stories
         ]);
     }
 
@@ -343,11 +363,13 @@ class PostManagementController extends Controller
         }
         $post = $post->withCount($countsQuery)->first();
         if($post) $post->user->is_following = $profile->isFollowing($post->user);
+        $transaction = Transactions::with(['user'])->where('post_id', $post->id)->get();
         return response()->json([
             'status' => true,
             'code' => 1003,
             'message' => 'Get Post detail success',
             'data' => $post,
+            'purchased_by' => $transaction
         ]);
     }
 
@@ -619,7 +641,16 @@ class PostManagementController extends Controller
             $profiles[$key]->is_follower = $followerStatus;
 
         }
-        return response()->json($profiles);
+
+        $posts = Post::where('title', 'like', '%' . $search . '%')
+        ->orWhere('description', 'like', '%' . $search . '%')
+        ->paginate(config('constants.paginate_per_page'));
+        return response()->json([
+            'status' => true,
+            'message' => 'Search success',
+            'users' => $profiles,
+            'events' => $posts
+        ]);
     }
 
     public function userByIds(Request $request)
@@ -1127,8 +1158,10 @@ class PostManagementController extends Controller
         if(is_null($post)) return response()->json(['status' => false, 'code' => 2015, 'message' => 'can\'t find post. please try again with correct data.']);
         // if($post->remainig_tickts < 1)  return response()->json(['status' => false, 'code' => 2016, 'message' => 'No more available tickts.']);
 
+        $lastTransaction = Transactions::orderBy('created_at','DESC')->first();
+        $orderId = '#'.str_pad(($lastTransaction->id ? $lastTransaction->id : 1) + 1, 8, "0", STR_PAD_LEFT);
         $amount = $post->price;
-        $description = 'Event booking, Event Name: '.$post->title.', amount: '.$request->amount.'';
+        $description = 'Event booking, Event Name: '.$post->title.', amount: '.$request->amount.' TicketId'.$orderId;
 
         try {
             Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
@@ -1152,6 +1185,7 @@ class PostManagementController extends Controller
         $transaction->stripe_token = $request->stripe_token;
         $transaction->amount = $amount;
         $transaction->description = $description;
+        $transaction->ticket_id = $orderId;
         $transaction->status = 1; // success
         $transaction->save();
 
@@ -1162,11 +1196,22 @@ class PostManagementController extends Controller
             'post_name' => $post->title,
             'post_image' => $post->media_url,
             'purchased_by' => $user->id,
+            'order_id' => $orderId,
             'purchased_by_image' => $user->image,
             'type' => 1,
         ];
         $user->notify(new InAppNotifications($user, $detail));
 
         return response()->json(['message' => 'Booking created successfully.', 'status' => true, 'code' => 2017]);
+    }
+
+    public function getEventTopics()
+    {
+        return response()->json([
+            'status' => true,
+            'code' => 1000,
+            'message' => 'Get Category List success',
+            'data' => config('constants.post_categories_obj'),
+        ]);
     }
 }

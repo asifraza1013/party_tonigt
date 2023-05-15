@@ -85,6 +85,7 @@ class InAppNotifications extends Notification
                 'purchased_by_image' => !isset($this->detail->purchased_by_image) ? null : $this->detail->purchased_by_image,
                 'purchased_by' => !isset($this->detail->purchased_by) ? null : $this->detail->purchased_by,
                 'liked_by_image' => !isset($this->detail->liked_by_image) ? null : $this->detail->liked_by_image,
+                'order_id' => !isset($this->detail->order_id) ? null : $this->detail->order_id,
             ];
         }
     }
