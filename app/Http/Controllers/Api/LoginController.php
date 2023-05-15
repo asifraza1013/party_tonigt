@@ -371,6 +371,7 @@ class LoginController extends Controller
 
         // get user posts
         $posts = null;
+        $stories = null;
         $postManagementController = new PostManagementController;
         if($request->has('user_id') && $request->user_id){
             $userPosts = $postManagementController->allPosts($request);
@@ -380,7 +381,8 @@ class LoginController extends Controller
         }else{
             $userPosts = $postManagementController->myposts($request);
             if($userPosts->original['code'] == 1009){
-                $posts = $userPosts->original['data'];
+                $posts = $userPosts->original['events'];
+                $stories = $userPosts->original['stories'];
             }
         }
 
@@ -405,6 +407,7 @@ class LoginController extends Controller
             'code' => 3001,
             'data' => $user,
             'posts' => $posts,
+            'stories' => $stories,
             'message' => 'Get user profile success',
         ]);
     }
