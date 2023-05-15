@@ -381,7 +381,7 @@ class LoginController extends Controller
         }else{
             $userPosts = $postManagementController->myposts($request);
             if($userPosts->original['code'] == 1009){
-                $posts = $userPosts->original['events'];
+                $posts = $userPosts->original['data'];
                 $stories = $userPosts->original['stories'];
             }
         }
