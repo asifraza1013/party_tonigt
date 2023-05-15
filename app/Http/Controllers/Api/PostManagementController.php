@@ -319,7 +319,7 @@ class PostManagementController extends Controller
             'status' => true,
             'code' => 1009,
             'message' => 'Get post list success',
-            'events' => $events,
+            'data' => $events,
             'stories' => $stories
         ]);
     }
