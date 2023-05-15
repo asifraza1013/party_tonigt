@@ -223,7 +223,7 @@ class PostManagementController extends Controller
             ->whereIn('id', $purchased)
             ->orderBy('created_at', 'desc');
         }else if($request->liked){
-            $likedPost = DB::table('post_activities')->where('user_apps_id', $profile->id)->where('type', config('constants.POST_ACTIVITY_LIKE'))->pluck('id')->all();
+            $likedPost = DB::table('post_activities')->where('user_apps_id', $profile->id)->where('type', config('constants.POST_ACTIVITY_LIKE'))->pluck('post_id')->all();
             $posts = Post::with(['user'])->where('status', 'Active')
             ->whereIn('id', $likedPost)
             ->orderBy('created_at', 'desc');
